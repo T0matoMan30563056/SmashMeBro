@@ -34,11 +34,10 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
         playerAttacks = GetComponent<PlayerAttacks>();
-
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
+
 
     }
 
@@ -46,15 +45,14 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
-
         isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
-
         Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
         if(Mathf.Abs(MoveValue.x) == 1)
         {
             playerAttacks.Direction = MoveValue.x;
         }
+        playerAttacks.VerticalDirection = MoveValue.y;
 
         rb.linearVelocity = new Vector2(Speed * MoveValue.x, rb.linearVelocity.y);
 
