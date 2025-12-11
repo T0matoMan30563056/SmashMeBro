@@ -534,7 +534,7 @@ GameObject:
   - component: {fileID: 798756295}
   - component: {fileID: 798756294}
   - component: {fileID: 798756293}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -581,7 +581,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!61 &798756295
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -598,7 +598,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1304,7 +1304,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1636570885}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: InsideCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1335,7 +1335,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1888478363}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1372,7 +1372,7 @@ GameObject:
   - component: {fileID: 2111405048}
   - component: {fileID: 2111405049}
   - component: {fileID: 2111405050}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1395,7 +1395,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1586,6 +1586,7 @@ MonoBehaviour:
   - {fileID: 4643043556677592188, guid: ca1685c7127d29b4d93963a4f41f568d, type: 3}
   - {fileID: 6307148200559283302, guid: a8e09c01a52cd214eb772977a02fa5fc, type: 3}
   Range: 1.5
+  ResetTime: 0.75
   Direction: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -11,12 +11,12 @@ public class PlayerAttacks : MonoBehaviour
     [SerializeField] private float Range;
 
     private int AttackOrder = 0;
-    private float ResetTime = 0.75f;
+    [SerializeField] private float ResetTime;
+    private float ResetTimeRemaining;
 
     public float Direction;
 
 
-    private bool ResetIsRunning = false;
 
     
 
@@ -29,19 +29,16 @@ public class PlayerAttacks : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Keyboard.current[Key.V].wasPressedThisFrame)
         {
 
             Instantiate(AttackSequence[AttackOrder], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
+            
             AttackOrder++;
 
-            if (ResetIsRunning)
-            {
-                StopCoroutine(AttackOrderReset());
-                ResetIsRunning = false;
-            }
+            ResetTimeRemaining = ResetTime;
             
-            StartCoroutine(AttackOrderReset());
 
             if(AttackOrder >= AttackSequence.Length)
             {
@@ -49,14 +46,14 @@ public class PlayerAttacks : MonoBehaviour
             }
 
         }
+        ResetTimeRemaining = Mathf.Max(ResetTimeRemaining - Time.deltaTime, 0);
+        if (ResetTimeRemaining == 0)
+        {
+            AttackOrder = 0;
+        }
+
     }
 
-    private IEnumerator AttackOrderReset()
-    {
-        ResetIsRunning = true;
-        yield return new WaitForSeconds(ResetTime);
-        AttackOrder = 0;
-        ResetIsRunning = false;
-    }
+
 
 }
