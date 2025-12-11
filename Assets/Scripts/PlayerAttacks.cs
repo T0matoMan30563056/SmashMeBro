@@ -15,7 +15,7 @@ public class PlayerAttacks : MonoBehaviour
     private float ResetTimeRemaining;
 
     public float Direction;
-
+    public float VerticalDirection;
 
 
     
@@ -23,6 +23,7 @@ public class PlayerAttacks : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+ 
 
     }
 
@@ -30,11 +31,18 @@ public class PlayerAttacks : MonoBehaviour
     void Update()
     {
 
-        if (Keyboard.current[Key.V].wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            Debug.Log(VerticalDirection);
+            if (Mathf.Abs(VerticalDirection) == 1)
+            {
+                Instantiate(AttackSequence[AttackOrder], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity);
+            }
+            else
+            {
 
-            Instantiate(AttackSequence[AttackOrder], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
-            
+                Instantiate(AttackSequence[AttackOrder], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
+            }
             AttackOrder++;
 
             ResetTimeRemaining = ResetTime;
