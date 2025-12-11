@@ -54,6 +54,10 @@ public class PlayerMovement : MonoBehaviour
         }
         playerAttacks.VerticalDirection = MoveValue.y;
 
+        playerAttacks.isGrounded = isGrounded;
+        playerAttacks.isInside = isInside;
+
+
         rb.linearVelocity = new Vector2(Speed * MoveValue.x, rb.linearVelocity.y);
 
 

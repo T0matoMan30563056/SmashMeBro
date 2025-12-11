@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2311263337009313742}
   - component: {fileID: -2613714414310592447}
   m_Layer: 0
-  m_Name: SwordSwing
+  m_Name: LightCombo
   m_TagString: Hurtbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,3 +153,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   Duration: 0.2
   Damage: 10
+  Recovery: 0.25

@@ -6,6 +6,7 @@ public class DeleteHitbox : MonoBehaviour
 {
     [SerializeField] private float Duration;
     public float Damage;
+    public float Recovery;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

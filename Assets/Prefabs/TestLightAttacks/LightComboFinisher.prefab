@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 605393870845774370}
   - component: {fileID: -6162618968535345784}
   m_Layer: 0
-  m_Name: SwordJab
+  m_Name: LightComboFinisher
   m_TagString: Hurtbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,3 +153,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DeleteHitbox
   Duration: 0.2
   Damage: 20
+  Recovery: 0.7

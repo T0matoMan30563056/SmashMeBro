@@ -1585,9 +1585,15 @@ MonoBehaviour:
   - {fileID: 4643043556677592188, guid: ca1685c7127d29b4d93963a4f41f568d, type: 3}
   - {fileID: 4643043556677592188, guid: ca1685c7127d29b4d93963a4f41f568d, type: 3}
   - {fileID: 6307148200559283302, guid: a8e09c01a52cd214eb772977a02fa5fc, type: 3}
+  LightUniqueAttacks:
+  - {fileID: 6812780180371225566, guid: 66fd67dfbc7154449a3a8a8861a139f6, type: 3}
+  - {fileID: 7182006581608563100, guid: 803e5f6d3d248824ab2e8b3f0ffdba2a, type: 3}
   Range: 1.5
   ResetTime: 0.75
   Direction: 0
+  VerticalDirection: 0
+  isGrounded: 0
+  isInside: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
