@@ -67,13 +67,39 @@ public class PlayerAttacks : MonoBehaviour
 
     private void HeavyAttacks()
     {
-        Debug.Log(new Vector2(Direction, VerticalDirection));
-        VerticalDirection = Mathf.RoundToInt(VerticalDirection);
-        VerticalDirection.ConvertTo<float>();
+        if (isGrounded)
+        {
+            Debug.Log(new Vector2(Direction, VerticalDirection));
+            VerticalDirection = Mathf.RoundToInt(VerticalDirection);
+            VerticalDirection.ConvertTo<float>();
 
-        GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity);
-        RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-        Recovery = true;
+            if (Mathf.Abs(VerticalDirection) == 1)
+            {
+                if (isGrounded && !isInside && VerticalDirection == -1)
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
+                    RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
+                    Recovery = true;
+
+
+                }
+                else
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], new Vector2(transform.position.x, transform.position.y + Range * Direction), Quaternion.identity);
+                    RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
+                    Recovery = true;
+                }
+            }
+            else
+            {
+
+                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
+                RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
+                Recovery = true;
+            }
+        } else {
+            Debug.Log("you in the air gang :dead_rose:"); 
+         }
     }
 
     private void LightAttacks()
