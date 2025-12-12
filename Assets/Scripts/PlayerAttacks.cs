@@ -9,6 +9,7 @@ public class PlayerAttacks : MonoBehaviour
 {
     [SerializeField] private GameObject[] AttackSequence;
     [SerializeField] private GameObject[] LightUniqueAttacks;
+    [SerializeField] private GameObject[] HeavyUniqueAttacks;
     [SerializeField] private float Range;
 
     private int AttackOrder = 0;
@@ -66,7 +67,13 @@ public class PlayerAttacks : MonoBehaviour
 
     private void HeavyAttacks()
     {
+        Debug.Log(new Vector2(Direction, VerticalDirection));
+        VerticalDirection = Mathf.RoundToInt(VerticalDirection);
+        VerticalDirection.ConvertTo<float>();
 
+        GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity);
+        RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
+        Recovery = true;
     }
 
     private void LightAttacks()
