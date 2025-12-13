@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,10 +22,17 @@ public class PlayerMovement : MonoBehaviour
     
     bool isGrounded;
     bool isInside;
+    
+    // Dashing
+    bool isDashing;
+    bool canDash = true;
+    private float DashPower = 240f;
+    private float DashingTime = 24f;
+    private float DashingCooldown = 24f;
 
+    [SerializeField] private TrailRenderer tr;
 
     private PlayerInput playerInput;
-
     private InputAction moveAction;
 
     float InputBuffer = 0f;
@@ -68,6 +76,12 @@ public class PlayerMovement : MonoBehaviour
             InputBuffer = BufferDuration;
         }
 
+        if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && canDash) 
+        {
+            Debug.Log("ts is working :thumbs_up:");
+            StartCoroutine(Dash());
+        }
+
         if (isGrounded && !isInside && JumpBuffer)
         {
 
@@ -83,6 +97,24 @@ public class PlayerMovement : MonoBehaviour
             JumpBuffer = false;
         }
 
+
+    }
+
+    private IEnumerator Dash()
+    {
+        canDash= false;
+        isDashing = true;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        rb.linearVelocity = new Vector2(playerAttacks.Direction * DashPower, 0f);
+        tr.emitting = true;
+        yield return new WaitForSeconds(DashingTime);
+        tr.emitting = false;
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(DashingCooldown);
+        canDash = true;
+        rb.gravityScale = 2f;
 
     }
 }
