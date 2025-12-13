@@ -1539,6 +1539,11 @@ MonoBehaviour:
   groundCheck: {fileID: 1888478363}
   InsideCheck: {fileID: 1636570885}
   BufferDuration: 0.2
+  isDashing: 0
+  DashPower: 48
+  DashingTime: 0.1
+  DashingCooldown: 0.5
+  tr: {fileID: 0}
 --- !u!114 &2111405049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1588,6 +1593,10 @@ MonoBehaviour:
   LightUniqueAttacks:
   - {fileID: 6812780180371225566, guid: 66fd67dfbc7154449a3a8a8861a139f6, type: 3}
   - {fileID: 7182006581608563100, guid: 803e5f6d3d248824ab2e8b3f0ffdba2a, type: 3}
+  HeavyUniqueAttacks:
+  - {fileID: 7050065763516548086, guid: ec63f4358f930884aae23034ab757bdf, type: 3}
+  - {fileID: 8151053973276798903, guid: 7dfe040ca1ed3fa4fa3ff9e94e5c6231, type: 3}
+  - {fileID: 663500807968630148, guid: ce2a05fd7b1c40145986a0dd331dfeb1, type: 3}
   Range: 1.5
   ResetTime: 0.75
   Direction: 0

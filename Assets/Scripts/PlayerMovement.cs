@@ -24,11 +24,11 @@ public class PlayerMovement : MonoBehaviour
     bool isInside;
     
     // Dashing
-    bool isDashing;
+    public bool isDashing;
     bool canDash = true;
-    private float DashPower = 240f;
-    private float DashingTime = 24f;
-    private float DashingCooldown = 24f;
+    [SerializeField] private float DashPower;
+    [SerializeField] private float DashingTime;
+    [SerializeField] private float DashingCooldown;
 
     [SerializeField] private TrailRenderer tr;
 
@@ -52,11 +52,25 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDashing)
+        {
+
+            rb.gravityScale = 0f;
+            rb.linearVelocity = new Vector2(playerAttacks.Direction * DashPower, 0f);
+
+            InputBuffer = 0f;
+            return;
+        }
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
         isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
         Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
-        if(Mathf.Abs(MoveValue.x) == 1)
+        MoveValue.x = Mathf.Round(MoveValue.x);
+        MoveValue.y = Mathf.Round(MoveValue.y);
+
+
+        if (Mathf.Abs(MoveValue.x) == 1)
         {
             playerAttacks.Direction = MoveValue.x;
         }
@@ -105,16 +119,14 @@ public class PlayerMovement : MonoBehaviour
         canDash= false;
         isDashing = true;
         float originalGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        rb.linearVelocity = new Vector2(playerAttacks.Direction * DashPower, 0f);
-        tr.emitting = true;
+        
+        //tr.emitting = true;
         yield return new WaitForSeconds(DashingTime);
-        tr.emitting = false;
+        //tr.emitting = false;
         rb.gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(DashingCooldown);
         canDash = true;
-        rb.gravityScale = 2f;
 
     }
 }

@@ -13,8 +13,11 @@ public class PlayerHealth : MonoBehaviour
 
     [SerializeField] private float InvincibilityDuration;
 
+    private Rigidbody2D rb;
+
     void Update()
     {
+        rb = GetComponent<Rigidbody2D>();
         HeathText.text = DamageTaken.ToString();
     }
 
@@ -23,6 +26,7 @@ public class PlayerHealth : MonoBehaviour
         if (collision.CompareTag("Hurtbox") && !Invincibility)
         {
             DamageTaken += Mathf.Round(collision.GetComponent<DeleteHitbox>().Damage);
+            rb.linearVelocity = collision.GetComponent<DeleteHitbox>().KnockbackValue;
             StartCoroutine(DamageBuffer());
         }
     }

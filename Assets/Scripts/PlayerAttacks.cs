@@ -37,6 +37,10 @@ public class PlayerAttacks : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GetComponent<PlayerMovement>().isDashing)
+        {
+            return;
+        }
 
         if (Mouse.current.leftButton.wasPressedThisFrame && !Recovery)
         {
@@ -69,33 +73,24 @@ public class PlayerAttacks : MonoBehaviour
     {
         if (isGrounded)
         {
-            Debug.Log(new Vector2(Direction, VerticalDirection));
-            VerticalDirection = Mathf.RoundToInt(VerticalDirection);
-            VerticalDirection.ConvertTo<float>();
-
             if (Mathf.Abs(VerticalDirection) == 1)
             {
                 if (isGrounded && !isInside && VerticalDirection == -1)
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
-                    RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-                    Recovery = true;
-
-
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
                 }
                 else
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], new Vector2(transform.position.x, transform.position.y + Range * Direction), Quaternion.identity);
-                    RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-                    Recovery = true;
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
                 }
             }
             else
             {
 
-                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
-                RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-                Recovery = true;
+                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
             }
         } else {
             Debug.Log("you in the air gang :dead_rose:"); 
@@ -104,31 +99,24 @@ public class PlayerAttacks : MonoBehaviour
 
     private void LightAttacks()
     {
-        Debug.Log(new Vector2(Direction, VerticalDirection));
-        VerticalDirection = Mathf.RoundToInt(VerticalDirection);
-        VerticalDirection.ConvertTo<float>();
 
         if (Mathf.Abs(VerticalDirection) == 1)
         {
             if (isGrounded && !isInside && VerticalDirection == -1)
             {
-                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[1], new Vector2(transform.position.x, transform.position.y + transform.localScale.y * VerticalDirection), Quaternion.identity);
-                HurtBoxObj.transform.localScale *= Direction;
-                RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-                Recovery = true;
+                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[1], new Vector2(transform.position.x, transform.position.y + transform.localScale.y * VerticalDirection), Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
             }
             else
             {
-                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[0], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity);
-                RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-                Recovery = true;
+                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[0], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
             }
         }
         else
         {
-            GameObject HurtBoxObj = Instantiate(AttackSequence[AttackOrder], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity);
-            RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-            Recovery = true;
+            GameObject HurtBoxObj = Instantiate(AttackSequence[AttackOrder], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity, transform);
+            HitboxParameters(HurtBoxObj);
         }
 
         AttackOrder++;
@@ -141,6 +129,12 @@ public class PlayerAttacks : MonoBehaviour
         }
     }
 
-
+    private void HitboxParameters(GameObject HurtBoxObj)
+    {
+        HurtBoxObj.transform.localScale *= Direction;
+        RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
+        HurtBoxObj.GetComponent<DeleteHitbox>().KnockbackValue.x *= Direction;
+        Recovery = true;
+    }
 
 }

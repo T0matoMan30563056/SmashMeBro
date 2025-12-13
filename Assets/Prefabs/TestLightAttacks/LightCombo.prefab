@@ -154,3 +154,4 @@ MonoBehaviour:
   Duration: 0.2
   Damage: 10
   Recovery: 0.25
+  KnockbackValue: {x: 2, y: 1}
