@@ -10,7 +10,6 @@ public class PlayerAttacks : MonoBehaviour
     [SerializeField] private GameObject[] AttackSequence;
     [SerializeField] private GameObject[] LightUniqueAttacks;
     [SerializeField] private GameObject[] HeavyUniqueAttacks;
-    [SerializeField] private float Range;
 
     private int AttackOrder = 0;
     [SerializeField] private float ResetTime;
@@ -77,19 +76,19 @@ public class PlayerAttacks : MonoBehaviour
             {
                 if (isGrounded && !isInside && VerticalDirection == -1)
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity, transform);
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
                     HitboxParameters(HurtBoxObj);
                 }
                 else
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity, transform);
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
                     HitboxParameters(HurtBoxObj);
                 }
             }
             else
             {
 
-                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity, transform);
+                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
                 HitboxParameters(HurtBoxObj);
             }
         } else {
@@ -102,26 +101,35 @@ public class PlayerAttacks : MonoBehaviour
 
         if (Mathf.Abs(VerticalDirection) == 1)
         {
-            if (isGrounded && !isInside && VerticalDirection == -1)
+            if (VerticalDirection == 1)
             {
-                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[1], new Vector2(transform.position.x, transform.position.y + transform.localScale.y * VerticalDirection), Quaternion.identity, transform);
+                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
                 HitboxParameters(HurtBoxObj);
             }
             else
             {
-                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[0], new Vector2(transform.position.x, transform.position.y + Range * VerticalDirection), Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
+                if (isGrounded && !isInside)
+                {
+                    GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
+                else
+                {
+                    GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
             }
         }
         else
         {
-            GameObject HurtBoxObj = Instantiate(AttackSequence[AttackOrder], new Vector2(transform.position.x + Range * Direction, transform.position.y), Quaternion.identity, transform);
+            GameObject HurtBoxObj = Instantiate(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
             HitboxParameters(HurtBoxObj);
+            AttackOrder++;
+
+            ResetTimeRemaining = ResetTime;
         }
 
-        AttackOrder++;
-
-        ResetTimeRemaining = ResetTime;
+        
 
         if (AttackOrder >= AttackSequence.Length)
         {
@@ -131,9 +139,13 @@ public class PlayerAttacks : MonoBehaviour
 
     private void HitboxParameters(GameObject HurtBoxObj)
     {
+        DeleteHitbox HurboxHitbox = HurtBoxObj.GetComponent<DeleteHitbox>();
+
         HurtBoxObj.transform.localScale *= Direction;
-        RecoveryCooldown = HurtBoxObj.GetComponent<DeleteHitbox>().Recovery;
-        HurtBoxObj.GetComponent<DeleteHitbox>().KnockbackValue.x *= Direction;
+        RecoveryCooldown = HurboxHitbox.Recovery;
+        HurboxHitbox.KnockbackValue.x *= Direction;
+        HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * Direction, HurboxHitbox.PositionValue.y, 0f);
+
         Recovery = true;
     }
 

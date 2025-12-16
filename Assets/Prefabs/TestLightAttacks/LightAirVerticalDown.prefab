@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3688133783080744060}
   - component: {fileID: 3538112260393309643}
   m_Layer: 0
-  m_Name: LightAirVertical
+  m_Name: LightAirVerticalDown
   m_TagString: Hurtbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.019819975, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.9823123, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -155,3 +155,4 @@ MonoBehaviour:
   Damage: 10
   Recovery: 0.5
   KnockbackValue: {x: 2, y: 5}
+  PositionValue: {x: 0, y: -1.3}

@@ -9,6 +9,8 @@ public class DeleteHitbox : MonoBehaviour
     public float Damage;
     public float Recovery;
     public Vector2 KnockbackValue;
+    public Vector2 PositionValue;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

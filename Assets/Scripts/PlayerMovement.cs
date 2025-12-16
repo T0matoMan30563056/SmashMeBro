@@ -38,6 +38,9 @@ public class PlayerMovement : MonoBehaviour
     float InputBuffer = 0f;
     bool JumpBuffer = false;
 
+    private bool isStunned = false;
+    private PlayerHealth playerHealth;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,11 +50,24 @@ public class PlayerMovement : MonoBehaviour
         moveAction = playerInput.actions["Move"];
 
 
+        if (GetComponent<PlayerHealth>())
+        {
+            playerHealth = GetComponent<PlayerHealth>();
+        }
+
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {   
+        if (playerHealth != null)
+        {
+            isStunned = playerHealth.Stunned;
+        }
+        if (isStunned)
+        {
+            return;
+        }
         if (isDashing)
         {
 

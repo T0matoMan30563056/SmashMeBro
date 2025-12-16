@@ -1592,12 +1592,12 @@ MonoBehaviour:
   - {fileID: 6307148200559283302, guid: a8e09c01a52cd214eb772977a02fa5fc, type: 3}
   LightUniqueAttacks:
   - {fileID: 6812780180371225566, guid: 66fd67dfbc7154449a3a8a8861a139f6, type: 3}
+  - {fileID: 6812780180371225566, guid: 93ac2e55d23c8eb4f9620d69445e70d1, type: 3}
   - {fileID: 7182006581608563100, guid: 803e5f6d3d248824ab2e8b3f0ffdba2a, type: 3}
   HeavyUniqueAttacks:
   - {fileID: 7050065763516548086, guid: ec63f4358f930884aae23034ab757bdf, type: 3}
   - {fileID: 8151053973276798903, guid: 7dfe040ca1ed3fa4fa3ff9e94e5c6231, type: 3}
   - {fileID: 663500807968630148, guid: ce2a05fd7b1c40145986a0dd331dfeb1, type: 3}
-  Range: 1.5
   ResetTime: 0.75
   Direction: 0
   VerticalDirection: 0

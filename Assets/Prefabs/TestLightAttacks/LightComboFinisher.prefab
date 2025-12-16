@@ -155,3 +155,4 @@ MonoBehaviour:
   Damage: 20
   Recovery: 0.7
   KnockbackValue: {x: 5, y: 2}
+  PositionValue: {x: 1.3, y: 0}

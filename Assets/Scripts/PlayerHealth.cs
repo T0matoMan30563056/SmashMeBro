@@ -15,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    public bool Stunned = false;
     void Update()
     {
         rb = GetComponent<Rigidbody2D>();
