@@ -41,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isStunned = false;
     private PlayerHealth playerHealth;
 
+    public bool AirJump = true;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -80,6 +82,12 @@ public class PlayerMovement : MonoBehaviour
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
         isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
+
+        if (isGrounded && !isInside)
+        {
+            AirJump = true;
+        }
+
         Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
         MoveValue.x = Mathf.Round(MoveValue.x);
@@ -101,9 +109,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (Keyboard.current[Key.Space].wasPressedThisFrame)
         {
-
-            JumpBuffer = true;
-            InputBuffer = BufferDuration;
+            if (!isGrounded && AirJump)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
+                AirJump = false;
+            }
+            else
+            {
+                JumpBuffer = true;
+                InputBuffer = BufferDuration;
+            }
         }
 
         if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && canDash) 
@@ -116,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
         {
 
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
+            InputBuffer = 0f;
         }
 
 

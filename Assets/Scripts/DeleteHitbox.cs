@@ -10,7 +10,8 @@ public class DeleteHitbox : MonoBehaviour
     public float Recovery;
     public Vector2 KnockbackValue;
     public Vector2 PositionValue;
-
+    public GameObject Origin;
+    //public bool GivesJump;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,4 +25,11 @@ public class DeleteHitbox : MonoBehaviour
         Destroy(gameObject);
     }
 
+    /*
+    public void GainJump()
+    {
+        if (!GivesJump) return;
+        Origin.GetComponent<PlayerMovement>().AirJump = true;
+    }
+    */
 }

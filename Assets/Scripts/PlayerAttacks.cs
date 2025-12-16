@@ -110,7 +110,7 @@ public class PlayerAttacks : MonoBehaviour
             {
                 if (isGrounded && !isInside)
                 {
-                    GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+                    GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
                     HitboxParameters(HurtBoxObj);
                 }
                 else
@@ -145,6 +145,7 @@ public class PlayerAttacks : MonoBehaviour
         RecoveryCooldown = HurboxHitbox.Recovery;
         HurboxHitbox.KnockbackValue.x *= Direction;
         HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * Direction, HurboxHitbox.PositionValue.y, 0f);
+        HurboxHitbox.Origin = gameObject;
 
         Recovery = true;
     }

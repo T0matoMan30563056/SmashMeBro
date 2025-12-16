@@ -24,8 +24,12 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Hurtbox") && !Invincibility)
+        if (collision.CompareTag("Hurtbox") && !Invincibility && collision.GetComponent<DeleteHitbox>() != null)
         {
+            if (collision.GetComponent<DeleteHitbox>().Origin == gameObject) return;
+
+
+            //collision.GetComponent<DeleteHitbox>().GainJump();
             DamageTaken += Mathf.Round(collision.GetComponent<DeleteHitbox>().Damage);
             rb.linearVelocity = collision.GetComponent<DeleteHitbox>().KnockbackValue;
             StartCoroutine(DamageBuffer());
