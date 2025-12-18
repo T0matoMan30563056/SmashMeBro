@@ -156,3 +156,4 @@ MonoBehaviour:
   Recovery: 0.25
   KnockbackValue: {x: 2, y: 1}
   PositionValue: {x: 1, y: 0}
+  Origin: {fileID: 0}

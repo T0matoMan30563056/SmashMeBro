@@ -48,6 +48,7 @@ public class PlayerAttacks : MonoBehaviour
         else if (Mouse.current.rightButton.wasPressedThisFrame && !Recovery)
         {
             HeavyAttacks();
+
         }
 
         ResetTimeRemaining = Mathf.Max(ResetTimeRemaining - Time.deltaTime, 0);
@@ -92,7 +93,8 @@ public class PlayerAttacks : MonoBehaviour
                 HitboxParameters(HurtBoxObj);
             }
         } else {
-            Debug.Log("you in the air gang :dead_rose:"); 
+            GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
+            HitboxParameters(HurtBoxObj);
          }
     }
 
@@ -146,6 +148,11 @@ public class PlayerAttacks : MonoBehaviour
         HurboxHitbox.KnockbackValue.x *= Direction;
         HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * Direction, HurboxHitbox.PositionValue.y, 0f);
         HurboxHitbox.Origin = gameObject;
+
+        if (HurboxHitbox.Animation)
+        {
+
+        }
 
         Recovery = true;
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using System.Security.Cryptography.X509Certificates;
+
 
 
 public class DeleteHitbox : MonoBehaviour
@@ -11,6 +11,11 @@ public class DeleteHitbox : MonoBehaviour
     public Vector2 KnockbackValue;
     public Vector2 PositionValue;
     public GameObject Origin;
+
+    public AnimationCurve VerticalAnimation;
+    public AnimationCurve HorizontalAnimation;
+    public bool Animation;
+
     //public bool GivesJump;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

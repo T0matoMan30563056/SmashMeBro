@@ -154,5 +154,6 @@ MonoBehaviour:
   Duration: 0.2
   Damage: 5
   Recovery: 0.5
-  KnockbackValue: {x: 2, y: 1.5}
+  KnockbackValue: {x: 2, y: 3}
   PositionValue: {x: 0, y: -1}
+  Origin: {fileID: 0}

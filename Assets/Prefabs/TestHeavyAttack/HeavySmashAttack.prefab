@@ -153,6 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   Duration: 0.2
   Damage: 100
-  Recovery: 1
+  Recovery: 0.5
   KnockbackValue: {x: 1, y: 5}
   PositionValue: {x: 2, y: -1}
+  Origin: {fileID: 0}

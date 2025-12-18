@@ -43,6 +43,15 @@ public class PlayerMovement : MonoBehaviour
 
     public bool AirJump = true;
 
+    public bool AnimationStun = false;
+
+    public AnimationCurve VerticalAnimation;
+    public AnimationCurve HorizontalAnimation;
+
+    private float AnimationTime;
+    private float AnimationDuration;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -70,6 +79,15 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+
+        if (AnimationStun)
+        {
+            AnimationTime += Time.deltaTime;
+
+
+            return;
+        }
+
         if (isDashing)
         {
 
@@ -79,7 +97,6 @@ public class PlayerMovement : MonoBehaviour
             InputBuffer = 0f;
             return;
         }
-
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
         isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
 
@@ -150,15 +167,22 @@ public class PlayerMovement : MonoBehaviour
     {
         canDash= false;
         isDashing = true;
-        float originalGravity = rb.gravityScale;
-        
-        //tr.emitting = true;
+        float originalGravity = rb.gravityScale; 
         yield return new WaitForSeconds(DashingTime);
-        //tr.emitting = false;
         rb.gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(DashingCooldown);
         canDash = true;
 
     }
+
+
+    public void StraightAnimation()
+    {
+        AnimationTime = 0f;
+
+        AnimationStun = true;
+        
+    }
+
 }
