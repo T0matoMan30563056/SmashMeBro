@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Security.Cryptography;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
@@ -51,6 +53,9 @@ public class PlayerMovement : MonoBehaviour
     private float AnimationTime;
     private float AnimationDuration;
 
+    private float OriginalGravity;
+
+    private float LocalDirection;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -65,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
         {
             playerHealth = GetComponent<PlayerHealth>();
         }
+
+        OriginalGravity = rb.gravityScale;
 
     }
 
@@ -84,6 +91,16 @@ public class PlayerMovement : MonoBehaviour
         {
             AnimationTime += Time.deltaTime;
 
+            rb.gravityScale = 0f;
+            rb.linearVelocity = new Vector2(HorizontalAnimation.Evaluate(AnimationTime) * LocalDirection, VerticalAnimation.Evaluate(AnimationTime));
+            Keyframe lastframe = HorizontalAnimation[HorizontalAnimation.length - 1];
+            if (AnimationTime >= lastframe.time)
+            {
+                AnimationStun = false;
+                rb.gravityScale = OriginalGravity;
+            }
+
+            InputBuffer = 0f;
 
             return;
         }
@@ -160,16 +177,14 @@ public class PlayerMovement : MonoBehaviour
             JumpBuffer = false;
         }
 
-
     }
 
     private IEnumerator Dash()
     {
         canDash= false;
         isDashing = true;
-        float originalGravity = rb.gravityScale; 
         yield return new WaitForSeconds(DashingTime);
-        rb.gravityScale = originalGravity;
+        rb.gravityScale = OriginalGravity;
         isDashing = false;
         yield return new WaitForSeconds(DashingCooldown);
         canDash = true;
@@ -177,8 +192,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    public void StraightAnimation()
+    public void AnimationMovement(float Direction)
     {
+        LocalDirection = Direction;
+
         AnimationTime = 0f;
 
         AnimationStun = true;
