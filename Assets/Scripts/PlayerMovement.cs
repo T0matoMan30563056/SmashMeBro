@@ -57,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
     private float LocalDirection;
 
+    public bool Strafe = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -98,11 +100,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 AnimationStun = false;
                 rb.gravityScale = OriginalGravity;
+                Strafe = false;
             }
 
             InputBuffer = 0f;
 
-            return;
+            if (!Strafe)
+            {
+                return;
+            }
         }
 
         if (isDashing)
@@ -137,11 +143,11 @@ public class PlayerMovement : MonoBehaviour
         playerAttacks.isGrounded = isGrounded;
         playerAttacks.isInside = isInside;
 
-
+        
         rb.linearVelocity = new Vector2(Speed * MoveValue.x, rb.linearVelocity.y);
 
 
-        if (Keyboard.current[Key.Space].wasPressedThisFrame)
+        if (Keyboard.current[Key.Space].wasPressedThisFrame && !Strafe)
         {
             if (!isGrounded && AirJump)
             {
@@ -155,13 +161,13 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && canDash) 
+        if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && canDash && !Strafe) 
         {
             Debug.Log("ts is working :thumbs_up:");
             StartCoroutine(Dash());
         }
 
-        if (isGrounded && !isInside && JumpBuffer)
+        if (isGrounded && !isInside && JumpBuffer && !Strafe)
         {
 
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);

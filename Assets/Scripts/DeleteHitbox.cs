@@ -15,7 +15,7 @@ public class DeleteHitbox : MonoBehaviour
     public AnimationCurve VerticalAnimation;
     public AnimationCurve HorizontalAnimation;
     public bool Animation;
-
+    public bool Strafe;
     //public bool GivesJump;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

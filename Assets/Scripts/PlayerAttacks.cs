@@ -154,6 +154,7 @@ public class PlayerAttacks : MonoBehaviour
             GetComponent<PlayerMovement>().VerticalAnimation = HurboxHitbox.VerticalAnimation;
             GetComponent<PlayerMovement>().HorizontalAnimation = HurboxHitbox.HorizontalAnimation;
             GetComponent<PlayerMovement>().AnimationMovement(Direction);
+            GetComponent<PlayerMovement>().Strafe = HurboxHitbox.Strafe;
         }
 
         Recovery = true;
