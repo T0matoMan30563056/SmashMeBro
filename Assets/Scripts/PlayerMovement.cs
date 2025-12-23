@@ -134,10 +134,7 @@ public class PlayerMovement : MonoBehaviour
         MoveValue.y = Mathf.Round(MoveValue.y);
 
 
-        if (Mathf.Abs(MoveValue.x) == 1)
-        {
-            playerAttacks.Direction = MoveValue.x;
-        }
+        playerAttacks.Direction = MoveValue.x;
         playerAttacks.VerticalDirection = MoveValue.y;
 
         playerAttacks.isGrounded = isGrounded;

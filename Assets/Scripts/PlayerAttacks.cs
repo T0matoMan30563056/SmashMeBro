@@ -15,6 +15,8 @@ public class PlayerAttacks : MonoBehaviour
     [SerializeField] private float ResetTime;
     private float ResetTimeRemaining;
 
+
+    private float HeldDirection = 1;
     public float Direction;
     public float VerticalDirection;
 
@@ -36,6 +38,10 @@ public class PlayerAttacks : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Mathf.Abs(Direction) == 1)
+        {
+            HeldDirection = Direction;
+        }
         if (GetComponent<PlayerMovement>().isDashing)
         {
             return;
@@ -77,25 +83,42 @@ public class PlayerAttacks : MonoBehaviour
             {
                 if (isGrounded && !isInside && VerticalDirection == -1)
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
                     HitboxParameters(HurtBoxObj);
                 }
                 else
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
                     HitboxParameters(HurtBoxObj);
                 }
             }
             else
             {
-
-                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
+                if (Mathf.Abs(Direction) == 1)
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
+                else
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
+            }
+        } 
+        else 
+        {
+            if (VerticalDirection == -1)
+            {
+                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[5], Vector3.zero, Quaternion.identity, transform);
                 HitboxParameters(HurtBoxObj);
             }
-        } else {
-            GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
-            HitboxParameters(HurtBoxObj);
-         }
+            else
+            {
+                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
+            }
+        }
     }
 
     private void LightAttacks()
@@ -124,11 +147,20 @@ public class PlayerAttacks : MonoBehaviour
         }
         else
         {
-            GameObject HurtBoxObj = Instantiate(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
-            HitboxParameters(HurtBoxObj);
-            AttackOrder++;
+            if (Mathf.Abs(Direction) == 1)
+            {
+                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
+            }
+            else
+            {
+                GameObject HurtBoxObj = Instantiate(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
+                AttackOrder++;
 
-            ResetTimeRemaining = ResetTime;
+                ResetTimeRemaining = ResetTime;
+            }
+
         }
 
         
@@ -143,17 +175,17 @@ public class PlayerAttacks : MonoBehaviour
     {
         DeleteHitbox HurboxHitbox = HurtBoxObj.GetComponent<DeleteHitbox>();
 
-        HurtBoxObj.transform.localScale *= Direction;
+        HurtBoxObj.transform.localScale *= HeldDirection;
         RecoveryCooldown = HurboxHitbox.Recovery;
-        HurboxHitbox.KnockbackValue.x *= Direction;
-        HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * Direction, HurboxHitbox.PositionValue.y, 0f);
+        HurboxHitbox.KnockbackValue.x *= HeldDirection;
+        HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * HeldDirection, HurboxHitbox.PositionValue.y, 0f);
         HurboxHitbox.Origin = gameObject;
 
         if (HurboxHitbox.Animation)
         {
             GetComponent<PlayerMovement>().VerticalAnimation = HurboxHitbox.VerticalAnimation;
             GetComponent<PlayerMovement>().HorizontalAnimation = HurboxHitbox.HorizontalAnimation;
-            GetComponent<PlayerMovement>().AnimationMovement(Direction);
+            GetComponent<PlayerMovement>().AnimationMovement(HeldDirection);
             GetComponent<PlayerMovement>().Strafe = HurboxHitbox.Strafe;
         }
 
