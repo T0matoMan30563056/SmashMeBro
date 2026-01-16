@@ -74,53 +74,6 @@ public class PlayerAttacks : MonoBehaviour
 
     }
 
-
-    private void HeavyAttacks()
-    {
-        if (isGrounded)
-        {
-            if (Mathf.Abs(VerticalDirection) == 1)
-            {
-                if (isGrounded && !isInside && VerticalDirection == -1)
-                {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
-                }
-                else
-                {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
-                }
-            }
-            else
-            {
-                if (Mathf.Abs(Direction) == 1)
-                {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
-                }
-                else
-                {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
-                }
-            }
-        } 
-        else 
-        {
-            if (VerticalDirection == -1)
-            {
-                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[5], Vector3.zero, Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
-            }
-            else
-            {
-                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
-            }
-        }
-    }
-
     private void LightAttacks()
     {
 
@@ -163,7 +116,7 @@ public class PlayerAttacks : MonoBehaviour
 
         }
 
-        
+
 
         if (AttackOrder >= AttackSequence.Length)
         {
@@ -171,6 +124,53 @@ public class PlayerAttacks : MonoBehaviour
         }
     }
 
+    private void HeavyAttacks()
+    {
+        if (isGrounded && !isInside)
+        {
+            if (Mathf.Abs(VerticalDirection) == 1)
+            {
+                if (VerticalDirection == -1)
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
+                else
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
+            }
+            else
+            {
+                if (Mathf.Abs(Direction) == 1)
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[5], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
+                else
+                {
+                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
+                    HitboxParameters(HurtBoxObj);
+                }
+            }
+        } 
+        else 
+        {
+            if (VerticalDirection == -1)
+            {
+                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
+            }
+            else
+            {
+                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
+                HitboxParameters(HurtBoxObj);
+            }
+        }
+    }
+
+   
     private void HitboxParameters(GameObject HurtBoxObj)
     {
         DeleteHitbox HurboxHitbox = HurtBoxObj.GetComponent<DeleteHitbox>();

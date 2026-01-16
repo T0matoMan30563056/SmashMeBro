@@ -964,7 +964,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: d333ef45d21e88649a71f78dcd7e99af, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1606,7 +1606,6 @@ GameObject:
   - component: {fileID: 2111405048}
   - component: {fileID: 2111405049}
   - component: {fileID: 2111405050}
-  - component: {fileID: 2111405051}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1782,8 +1781,8 @@ MonoBehaviour:
   LeftCheck: {fileID: 207016396}
   BufferDuration: 0.2
   isDashing: 0
-  DashPower: 37
-  DashingTime: 0.13
+  DashPower: 48
+  DashingTime: 0.1
   DashingCooldown: 0.5
   tr: {fileID: 0}
   AirJump: 1
@@ -1838,7 +1837,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   Strafe: 0
   ExtraVertcalMomentum: 0
-  MomentumTime: 1
+  MomentumTime: 0
 --- !u!114 &2111405049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1902,28 +1901,6 @@ MonoBehaviour:
   VerticalDirection: 0
   isGrounded: 0
   isInside: 0
---- !u!95 &2111405051
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2111405043}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc0f14b790660a34aae35312451fae37, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

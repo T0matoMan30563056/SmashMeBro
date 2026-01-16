@@ -14,9 +14,16 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float Speed;
     [SerializeField] private float Jump;
+    [SerializeField] private float WallVerticalVelocity;
+
     [SerializeField] LayerMask ground;
+    [SerializeField] LayerMask wall;
+
     [SerializeField] Transform groundCheck;
     [SerializeField] Transform InsideCheck;
+    [SerializeField] Transform RightCheck;
+    [SerializeField] Transform LeftCheck;
+
     [SerializeField] float BufferDuration;
 
 
@@ -24,7 +31,10 @@ public class PlayerMovement : MonoBehaviour
     
     bool isGrounded;
     bool isInside;
-    
+    int isTouchingWall = 0;
+
+
+
     // Dashing
     public bool isDashing;
     bool canDash = true;
@@ -59,6 +69,17 @@ public class PlayerMovement : MonoBehaviour
 
     public bool Strafe = false;
 
+    public float ExtraVertcalMomentum;
+
+    private float CurrentVerticalMomentum = 0;
+
+    public float MomentumTime = 1;
+
+    private Vector3 StartScale;
+
+    private Animator PlayerAnimator; 
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -66,7 +87,8 @@ public class PlayerMovement : MonoBehaviour
         playerAttacks = GetComponent<PlayerAttacks>();
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
-
+        StartScale = transform.localScale;
+        PlayerAnimator = GetComponent<Animator>();
 
         if (GetComponent<PlayerHealth>())
         {
@@ -79,7 +101,11 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
+    {
+        CurrentVerticalMomentum = Mathf.Lerp(ExtraVertcalMomentum, 0, LerpT(MomentumTime));
+        MomentumTime += Time.deltaTime;
+
+
         if (playerHealth != null)
         {
             isStunned = playerHealth.Stunned;
@@ -123,6 +149,21 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
         isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
 
+        if (Physics2D.OverlapCircle(RightCheck.position, 0.1f, wall))
+        {
+            isTouchingWall = 1;
+
+        }
+        else if (Physics2D.OverlapCircle(LeftCheck.position, 0.1f, wall))
+        {
+            isTouchingWall = -1;
+        }
+        else
+        {
+            isTouchingWall = 0;
+        }
+
+
         if (isGrounded && !isInside)
         {
             AirJump = true;
@@ -133,6 +174,15 @@ public class PlayerMovement : MonoBehaviour
         MoveValue.x = Mathf.Round(MoveValue.x);
         MoveValue.y = Mathf.Round(MoveValue.y);
 
+        if (Mathf.Abs(MoveValue.x) == 1f)
+        {
+            transform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
+            PlayerAnimator.SetBool("Running", true);
+        }
+        else
+        {
+            PlayerAnimator.SetBool("Running", false);
+        }
 
         playerAttacks.Direction = MoveValue.x;
         playerAttacks.VerticalDirection = MoveValue.y;
@@ -141,21 +191,33 @@ public class PlayerMovement : MonoBehaviour
         playerAttacks.isInside = isInside;
 
         
-        rb.linearVelocity = new Vector2(Speed * MoveValue.x, rb.linearVelocity.y);
+        //rb.linearVelocity = new Vector2(Speed * MoveValue.x + CurrentVerticalMomentum, rb.linearVelocity.y);
+        //This is a potential fix
+        rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, Speed * MoveValue.x, LerpT(MomentumTime)), rb.linearVelocity.y);
 
 
         if (Keyboard.current[Key.Space].wasPressedThisFrame && !Strafe)
         {
-            if (!isGrounded && AirJump)
+
+            if (!isGrounded && AirJump && isTouchingWall == 0)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
                 AirJump = false;
+            }
+            else if(!isGrounded && isTouchingWall != 0)
+            {
+                ExtraVertcalMomentum = WallVerticalVelocity * -isTouchingWall;
+                MomentumTime = 0;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x + ExtraVertcalMomentum, Jump);
             }
             else
             {
                 JumpBuffer = true;
                 InputBuffer = BufferDuration;
             }
+            
+
+
         }
 
         if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && canDash && !Strafe) 
@@ -172,6 +234,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
+
         InputBuffer -= Time.deltaTime;
         InputBuffer = Mathf.Clamp(InputBuffer, 0f, BufferDuration);
 
@@ -181,6 +244,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+
+    
 
     private IEnumerator Dash()
     {
@@ -203,6 +268,12 @@ public class PlayerMovement : MonoBehaviour
 
         AnimationStun = true;
         
+    }
+
+
+    float LerpT(float t)
+    {
+        return Mathf.Pow(t, 3);
     }
 
 }
