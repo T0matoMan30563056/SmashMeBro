@@ -42,10 +42,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float DashingTime;
     [SerializeField] private float DashingCooldown;
 
+    private bool DashStart;
+
     [SerializeField] private TrailRenderer tr;
 
-    private PlayerInput playerInput;
-    private InputAction moveAction;
 
     float InputBuffer = 0f;
     bool JumpBuffer = false;
@@ -77,7 +77,16 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 StartScale;
 
-    private Animator PlayerAnimator; 
+    [SerializeField] private Animator PlayerAnimator;
+
+    [SerializeField] private Transform SpriteTransform;
+
+    public bool IsArrowKeys;
+
+    private bool Jumped = false;
+
+    private Vector2 MoveValue = Vector2.zero;
+    //Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -85,10 +94,8 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerAttacks = GetComponent<PlayerAttacks>();
-        playerInput = GetComponent<PlayerInput>();
-        moveAction = playerInput.actions["Move"];
-        StartScale = transform.localScale;
-        PlayerAnimator = GetComponent<Animator>();
+        StartScale = SpriteTransform.localScale;
+
 
         if (GetComponent<PlayerHealth>())
         {
@@ -98,6 +105,25 @@ public class PlayerMovement : MonoBehaviour
         OriginalGravity = rb.gravityScale;
 
     }
+
+
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        MoveValue = context.ReadValue<Vector2>();
+    }
+
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        Jumped = context.action.triggered;
+    }
+
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        DashStart = context.action.triggered;
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -169,14 +195,13 @@ public class PlayerMovement : MonoBehaviour
             AirJump = true;
         }
 
-        Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
         MoveValue.x = Mathf.Round(MoveValue.x);
         MoveValue.y = Mathf.Round(MoveValue.y);
 
         if (Mathf.Abs(MoveValue.x) == 1f)
         {
-            transform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
+            SpriteTransform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
             PlayerAnimator.SetBool("Running", true);
         }
         else
@@ -196,9 +221,8 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, Speed * MoveValue.x, LerpT(MomentumTime)), rb.linearVelocity.y);
 
 
-        if (Keyboard.current[Key.Space].wasPressedThisFrame && !Strafe)
+        if (Jumped && !Strafe)
         {
-
             if (!isGrounded && AirJump && isTouchingWall == 0)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
@@ -220,9 +244,8 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
-        if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && canDash && !Strafe) 
+        if (DashStart && canDash && !Strafe) 
         {
-            Debug.Log("ts is working :thumbs_up:");
             StartCoroutine(Dash());
         }
 
