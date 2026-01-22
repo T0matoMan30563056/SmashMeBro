@@ -190,9 +190,11 @@ GameObject:
   - component: {fileID: 6837913271328459878}
   - component: {fileID: 4947528772151766986}
   - component: {fileID: 8294698883528644566}
+  - component: {fileID: -2033441039608655813}
   - component: {fileID: 8795774801466663203}
   - component: {fileID: 7192247490272671284}
   - component: {fileID: 503597845291750359}
+  - component: {fileID: 8893110539316738678}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -342,6 +344,31 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!114 &-2033441039608655813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3467436157580718423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1175095013
+  InScenePlacedSourceGlobalObjectIdHash: 1175095013
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &8795774801466663203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,26 +381,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0112e3c8c5ad7cd4baa9135db07f3cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   Speed: 6
-  Jump: 10
-  WallVerticalVelocity: 10
+  PlayerAnimator: {fileID: 2903413630545837576}
+  SpriteTransform: {fileID: 7089212783578139829}
+  groundCheck: {fileID: 5939650933932939903}
+  InsideCheck: {fileID: 8253529600997618045}
+  RightCheck: {fileID: 735052236702149023}
+  LeftCheck: {fileID: 947771793666805876}
   ground:
     serializedVersion: 2
     m_Bits: 8
   wall:
     serializedVersion: 2
     m_Bits: 128
-  groundCheck: {fileID: 5939650933932939903}
-  InsideCheck: {fileID: 8253529600997618045}
-  RightCheck: {fileID: 735052236702149023}
-  LeftCheck: {fileID: 947771793666805876}
+  Jump: 10
   BufferDuration: 0.2
+  AirJump: 1
+  WallVerticalVelocity: 10
   isDashing: 0
   DashPower: 37
   DashingTime: 0.13
   DashingCooldown: 0.5
-  tr: {fileID: 0}
-  AirJump: 1
   AnimationStun: 0
   VerticalAnimation:
     serializedVersion: 2
@@ -426,9 +455,7 @@ MonoBehaviour:
   Strafe: 0
   ExtraVertcalMomentum: 0
   MomentumTime: 1
-  PlayerAnimator: {fileID: 2903413630545837576}
-  SpriteTransform: {fileID: 7089212783578139829}
-  IsArrowKeys: 0
+  MomentumLerpMultiplier: 1
 --- !u!114 &7192247490272671284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,6 +658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cb725bf770bc9542a03c30a7d64834c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   AttackSequence:
   - {fileID: 4643043556677592188, guid: ca1685c7127d29b4d93963a4f41f568d, type: 3}
   - {fileID: 4643043556677592188, guid: ca1685c7127d29b4d93963a4f41f568d, type: 3}
@@ -652,6 +680,21 @@ MonoBehaviour:
   VerticalDirection: 0
   isGrounded: 0
   isInside: 0
+--- !u!114 &8893110539316738678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3467436157580718423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be504c4339111bf46877688c65708700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  InvincibilityDuration: 0
+  Stunned: 0
 --- !u!1 &6225196200550419685
 GameObject:
   m_ObjectHideFlags: 0

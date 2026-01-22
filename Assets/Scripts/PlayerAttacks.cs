@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerAttacks : MonoBehaviour
+public class PlayerAttacks : NetworkBehaviour
 {
     [SerializeField] private GameObject[] AttackSequence;
     [SerializeField] private GameObject[] LightUniqueAttacks;
@@ -28,11 +30,14 @@ public class PlayerAttacks : MonoBehaviour
     private bool Recovery = false;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
- 
 
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+        {
+            Destroy(this);
+        }
     }
 
     // Update is called once per frame
@@ -178,6 +183,7 @@ public class PlayerAttacks : MonoBehaviour
         HurtBoxObj.transform.localScale *= HeldDirection;
         RecoveryCooldown = HurboxHitbox.Recovery;
         HurboxHitbox.KnockbackValue.x *= HeldDirection;
+        HurboxHitbox.AddedVerticalMomentum *= HeldDirection;
         HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * HeldDirection, HurboxHitbox.PositionValue.y, 0f);
         HurboxHitbox.Origin = gameObject;
 

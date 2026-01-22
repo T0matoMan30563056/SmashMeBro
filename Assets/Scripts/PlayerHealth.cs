@@ -1,11 +1,12 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
+using TMPro;
+using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : NetworkBehaviour
 {
 
-    [SerializeField] private TextMeshProUGUI HeathText;
 
     private float DamageTaken = 0;
 
@@ -16,10 +17,28 @@ public class PlayerHealth : MonoBehaviour
     private Rigidbody2D rb;
 
     public bool Stunned = false;
+
+    private PlayerMovement playerMovement;
+
+
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+        {
+            GetComponent<PlayerInput>().enabled = false;
+            Destroy(this);
+        }
+    }
+
+    private void Awake()
+    {
+        playerMovement = GetComponent<PlayerMovement>();
+    }
+
     void Update()
     {
         rb = GetComponent<Rigidbody2D>();
-        HeathText.text = DamageTaken.ToString();
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -32,6 +51,12 @@ public class PlayerHealth : MonoBehaviour
             //collision.GetComponent<DeleteHitbox>().GainJump();
             DamageTaken += Mathf.Round(collision.GetComponent<DeleteHitbox>().Damage);
             rb.linearVelocity = collision.GetComponent<DeleteHitbox>().KnockbackValue;
+            if (playerMovement != null)
+            {
+                playerMovement.MomentumTime = 0;
+                playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum;
+                Debug.Log(gameObject);
+            }
             StartCoroutine(DamageBuffer());
         }
     }

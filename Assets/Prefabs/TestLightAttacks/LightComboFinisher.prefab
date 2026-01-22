@@ -224,3 +224,5 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   Animation: 1
+  Strafe: 0
+  AddedVerticalMomentum: 7.5

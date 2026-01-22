@@ -1,41 +1,55 @@
+using System;
 using System.Collections;
 using System.Security.Cryptography;
 using Unity.Mathematics;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
 
+    [Header("Movement and Components")]
     private Rigidbody2D rb;
-
     [SerializeField] private float Speed;
-    [SerializeField] private float Jump;
-    [SerializeField] private float WallVerticalVelocity;
+    private PlayerAttacks playerAttacks;
+    private float LocalDirection;
+    [SerializeField] private Animator PlayerAnimator;
+    [SerializeField] private Transform SpriteTransform;
+    private PlayerHealth playerHealth;
+    private Vector2 MoveValue = Vector2.zero;
 
-    [SerializeField] LayerMask ground;
-    [SerializeField] LayerMask wall;
 
+
+    [Header("Position Checks")]
     [SerializeField] Transform groundCheck;
     [SerializeField] Transform InsideCheck;
     [SerializeField] Transform RightCheck;
     [SerializeField] Transform LeftCheck;
-
-    [SerializeField] float BufferDuration;
-
-
-    private PlayerAttacks playerAttacks;
-    
+    [SerializeField] LayerMask ground;
+    [SerializeField] LayerMask wall;
     bool isGrounded;
     bool isInside;
     int isTouchingWall = 0;
 
 
 
-    // Dashing
+    [Header("Jumping")]
+    [SerializeField] private float Jump;
+    float InputBuffer = 0f;
+    bool JumpBuffer = false;
+    [SerializeField] float BufferDuration;
+    private bool Jumped = false;
+    private int JumpHoldTester = 0;
+    public bool AirJump = true;
+    [SerializeField] private float WallVerticalVelocity;
+
+
+
+    [Header("Dashing")]
     public bool isDashing;
     bool canDash = true;
     [SerializeField] private float DashPower;
@@ -44,48 +58,31 @@ public class PlayerMovement : MonoBehaviour
 
     private bool DashStart;
 
-    [SerializeField] private TrailRenderer tr;
 
-
-    float InputBuffer = 0f;
-    bool JumpBuffer = false;
+    [Header("Attack Animations and Stunns")]
 
     private bool isStunned = false;
-    private PlayerHealth playerHealth;
-
-    public bool AirJump = true;
-
     public bool AnimationStun = false;
-
     public AnimationCurve VerticalAnimation;
     public AnimationCurve HorizontalAnimation;
-
     private float AnimationTime;
     private float AnimationDuration;
-
-    private float OriginalGravity;
-
-    private float LocalDirection;
-
     public bool Strafe = false;
 
+
+    [Header("Momentum")]
     public float ExtraVertcalMomentum;
-
     private float CurrentVerticalMomentum = 0;
-
     public float MomentumTime = 1;
+    public float MomentumLerpMultiplier = 1;
 
+
+    //Start Variables
     private Vector3 StartScale;
+    private float OriginalGravity;
 
-    [SerializeField] private Animator PlayerAnimator;
 
-    [SerializeField] private Transform SpriteTransform;
 
-    public bool IsArrowKeys;
-
-    private bool Jumped = false;
-
-    private Vector2 MoveValue = Vector2.zero;
     //Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
 
@@ -106,6 +103,15 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+        {
+            GetComponent<PlayerInput>().enabled = false;
+            Destroy(this);
+        }
+    }
 
 
     public void OnMove(InputAction.CallbackContext context)
@@ -128,8 +134,22 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (Jumped)
+        {
+            JumpHoldTester += 1;
+            if (JumpHoldTester == 2)
+            {
+                Jumped = false;
+            } 
+        }
+        else if (!Jumped)
+        {
+            JumpHoldTester = 0;
+        }
+
         CurrentVerticalMomentum = Mathf.Lerp(ExtraVertcalMomentum, 0, LerpT(MomentumTime));
-        MomentumTime += Time.deltaTime;
+        MomentumTime += Time.deltaTime * MomentumLerpMultiplier;
 
 
         if (playerHealth != null)
@@ -223,6 +243,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Jumped && !Strafe)
         {
+            
             if (!isGrounded && AirJump && isTouchingWall == 0)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
@@ -251,7 +272,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded && !isInside && JumpBuffer && !Strafe)
         {
-
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
             InputBuffer = 0f;
         }

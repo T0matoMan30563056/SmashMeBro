@@ -207,3 +207,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   Animation: 1
   Strafe: 0
+  AddedVerticalMomentum: 2
