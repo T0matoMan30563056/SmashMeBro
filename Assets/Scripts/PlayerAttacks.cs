@@ -36,7 +36,7 @@ public class PlayerAttacks : NetworkBehaviour
     {
         if (!IsOwner)
         {
-            Destroy(this);
+            enabled = false; return;
         }
     }
 
