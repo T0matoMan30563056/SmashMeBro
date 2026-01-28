@@ -108,8 +108,9 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (!IsOwner)
         {
+            enabled = false;
             GetComponent<PlayerInput>().enabled = false;
-            Destroy(this);
+            return;
         }
     }
 

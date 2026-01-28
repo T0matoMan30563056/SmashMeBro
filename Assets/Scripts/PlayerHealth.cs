@@ -27,18 +27,20 @@ public class PlayerHealth : NetworkBehaviour
         if (!IsOwner)
         {
             GetComponent<PlayerInput>().enabled = false;
-            Destroy(this);
+            enabled = false;
+            return;
         }
     }
 
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        rb = GetComponent<Rigidbody2D>();
+
     }
 
     void Update()
     {
-        rb = GetComponent<Rigidbody2D>();
     }
 
     private void OnTriggerStay2D(Collider2D collision)
