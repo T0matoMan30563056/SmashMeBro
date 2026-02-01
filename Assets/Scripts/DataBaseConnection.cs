@@ -4,12 +4,13 @@ using System.Collections;
 using System.Text;
 using Unity.VisualScripting;
 using System;
+using UnityEditor.PackageManager.Requests;
 
 public class DataBaseConnection : MonoBehaviour
 {
 
     public static DataBaseConnection instance;
-
+    public NetworkSObject.PlayerData SObjPlayerData;
     private void Awake()
     {
         if (instance == null)
@@ -45,6 +46,8 @@ public class DataBaseConnection : MonoBehaviour
         }
         else
         {
+            SObjPlayerData = JsonUtility.FromJson<NetworkSObject.PlayerData>(request.downloadHandler.text);
+            print(SObjPlayerData.ToString());
             Debug.Log("Response: " + request.downloadHandler.text);
         }
     }
