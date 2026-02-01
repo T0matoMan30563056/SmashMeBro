@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
 
 
-public class DeleteHitbox : MonoBehaviour
+public class DeleteHitbox : NetworkBehaviour
 {
     [SerializeField] private float Duration;
     public float Damage;
@@ -29,7 +30,14 @@ public class DeleteHitbox : MonoBehaviour
     private IEnumerator DeleteWithDelay()
     {
         yield return new WaitForSeconds(Duration);
-        Destroy(gameObject);
+
+        DeleteOnServerRpc();
+    }
+
+    [ServerRpc]
+    private void DeleteOnServerRpc()
+    {
+        NetworkObject.Despawn(true);
     }
 
     /*

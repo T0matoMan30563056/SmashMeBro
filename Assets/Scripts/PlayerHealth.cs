@@ -57,7 +57,6 @@ public class PlayerHealth : NetworkBehaviour
             {
                 playerMovement.MomentumTime = 0;
                 playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum;
-                Debug.Log(gameObject);
             }
             StartCoroutine(DamageBuffer());
         }

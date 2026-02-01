@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Text;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.UI.Image;
 
 public class PlayerAttacks : NetworkBehaviour
 {
@@ -30,19 +32,26 @@ public class PlayerAttacks : NetworkBehaviour
     private bool Recovery = false;
 
 
+    private NetworkObject NetObj;
 
-
+    private NetworkObjectReference NetObjRef;
     public override void OnNetworkSpawn()
+    {
+    }
+
+    private void Start()
+    {
+        NetObj = GetComponent<NetworkObject>();
+        NetObjRef = NetObj;
+    }
+
+
+void Update()
     {
         if (!IsOwner)
         {
-            enabled = false; return;
+            return;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         if (Mathf.Abs(Direction) == 1)
         {
             HeldDirection = Direction;
@@ -86,20 +95,21 @@ public class PlayerAttacks : NetworkBehaviour
         {
             if (VerticalDirection == 1)
             {
-                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
+                RequestFireServerRpc(new int[] {1, 0}, NetObjRef);
+                //StartHitbox(LightUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
                 if (isGrounded && !isInside)
                 {
-                    GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
+                    RequestFireServerRpc(new int[] { 1, 2 }, NetObjRef);
+                    //StartHitbox(LightUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
+                    
                 }
                 else
                 {
-                    GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
+                    RequestFireServerRpc(new int[] { 1, 1 }, NetObjRef);
+                    //StartHitbox(LightUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
                 }
             }
         }
@@ -107,13 +117,13 @@ public class PlayerAttacks : NetworkBehaviour
         {
             if (Mathf.Abs(Direction) == 1)
             {
-                GameObject HurtBoxObj = Instantiate(LightUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
+                RequestFireServerRpc(new int[] { 1, 3 }, NetObjRef);
+                //StartHitbox(LightUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
-                GameObject HurtBoxObj = Instantiate(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
+                RequestFireServerRpc(new int[] { 0, AttackOrder}, NetObjRef);
+                //StartHitbox(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
                 AttackOrder++;
 
                 ResetTimeRemaining = ResetTime;
@@ -137,26 +147,26 @@ public class PlayerAttacks : NetworkBehaviour
             {
                 if (VerticalDirection == -1)
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
+                    RequestFireServerRpc(new int[] { 2, 1 }, NetObjRef);
+                    //StartHitbox(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
                 }
                 else
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
+                    RequestFireServerRpc(new int[] { 2, 1 }, NetObjRef);
+                    //StartHitbox(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
                 }
             }
             else
             {
                 if (Mathf.Abs(Direction) == 1)
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[5], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
+                    RequestFireServerRpc(new int[] { 2, 5 }, NetObjRef);
+                    //StartHitbox(HeavyUniqueAttacks[5], Vector3.zero, Quaternion.identity, transform);
                 }
                 else
                 {
-                    GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
-                    HitboxParameters(HurtBoxObj);
+                    RequestFireServerRpc(new int[] { 2, 0 }, NetObjRef);
+                    //StartHitbox(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
                 }
             }
         } 
@@ -164,20 +174,34 @@ public class PlayerAttacks : NetworkBehaviour
         {
             if (VerticalDirection == -1)
             {
-                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
+                RequestFireServerRpc(new int[] { 2, 4 }, NetObjRef);
+                //StartHitbox(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
-                GameObject HurtBoxObj = Instantiate(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
-                HitboxParameters(HurtBoxObj);
+                RequestFireServerRpc(new int[] { 2, 3 }, NetObjRef);
+                //StartHitbox(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
             }
         }
     }
 
-   
-    private void HitboxParameters(GameObject HurtBoxObj)
+   /*
+    private void StartHitbox(GameObject Attack, Vector3 Position, Quaternion Rotation, Transform Origin)
     {
+        GameObject HurtBoxObj = Instantiate(Attack, Position, Rotation, Origin);
+        HitboxParameters(HurtBoxObj);
+    }*/
+
+    [ClientRpc]
+    private void HitboxParametersClientRpc(NetworkObjectReference HurtBoxObjRef)
+    {
+
+        if (!HurtBoxObjRef.TryGet(out NetworkObject HurtBoxObj))
+        {
+            Debug.Log("No NetworkObj found");
+            return;
+        }
+
         DeleteHitbox HurboxHitbox = HurtBoxObj.GetComponent<DeleteHitbox>();
 
         HurtBoxObj.transform.localScale *= HeldDirection;
@@ -198,4 +222,54 @@ public class PlayerAttacks : NetworkBehaviour
         Recovery = true;
     }
 
+    
+    //Execute on server
+    [ServerRpc]
+    private void RequestFireServerRpc(int[] AttackType, NetworkObjectReference Origin)
+    {
+        //FireClientRpc(Attack, Position, Rotation, Origin);
+        GameObject Attack = null;
+
+        if (!Origin.TryGet(out NetworkObject OriginObj))
+        {
+            Debug.Log("No NetworkObj found");
+            return;
+        }
+
+        if (AttackType[0] == 0)  // AttackType[0] = 0 means that the attack is part of the light attack sequence
+        {
+            Attack = AttackSequence[AttackType[1]];
+        }
+        else if (AttackType[0] == 1) // AttackType[0] = 1 means that the attack is an unique light attack
+        {
+            Attack = LightUniqueAttacks[AttackType[1]];
+        }
+        else if (AttackType[0] == 2) // AttackType[0] = 1 means that the attack is an unique heavy attack
+        {
+            Attack = HeavyUniqueAttacks[AttackType[1]];
+        }
+
+        if (Attack == null) 
+        {
+            return;
+        }
+
+        GameObject HurtBoxObj = Instantiate(Attack, OriginObj.transform.position, Quaternion.identity);
+        NetworkObject AttackNetObj = HurtBoxObj.GetComponent<NetworkObject>();
+        HurtBoxObj.GetComponent<NetworkObject>().Spawn();
+        AttackNetObj.TrySetParent(OriginObj);
+
+        NetworkObjectReference AttackObjRef = AttackNetObj;
+        HitboxParametersClientRpc(AttackObjRef);
+    }
+    /*
+    //Execute on ALL clients
+    [ClientRpc]
+    private void FireClientRpc(GameObject Attack, Vector3 Position, Quaternion Rotation, Transform Origin)
+    {
+        if (IsOwner) return;
+        GameObject HurtBoxObj = Instantiate(Attack, Position, Rotation, Origin);
+        HitboxParameters(HurtBoxObj);
+    }
+    */
 }
