@@ -95,20 +95,20 @@ void Update()
         {
             if (VerticalDirection == 1)
             {
-                RequestFireServerRpc(new int[] {1, 0}, NetObjRef);
+                RequestFireServerRpc(new int[] {1, 0}, NetObjRef, HeldDirection);
                 //StartHitbox(LightUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
                 if (isGrounded && !isInside)
                 {
-                    RequestFireServerRpc(new int[] { 1, 2 }, NetObjRef);
+                    RequestFireServerRpc(new int[] { 1, 2 }, NetObjRef, HeldDirection);
                     //StartHitbox(LightUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
                     
                 }
                 else
                 {
-                    RequestFireServerRpc(new int[] { 1, 1 }, NetObjRef);
+                    RequestFireServerRpc(new int[] { 1, 1 }, NetObjRef, HeldDirection);
                     //StartHitbox(LightUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
                 }
             }
@@ -117,12 +117,12 @@ void Update()
         {
             if (Mathf.Abs(Direction) == 1)
             {
-                RequestFireServerRpc(new int[] { 1, 3 }, NetObjRef);
+                RequestFireServerRpc(new int[] { 1, 3 }, NetObjRef, HeldDirection);
                 //StartHitbox(LightUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
-                RequestFireServerRpc(new int[] { 0, AttackOrder}, NetObjRef);
+                RequestFireServerRpc(new int[] { 0, AttackOrder}, NetObjRef, HeldDirection);
                 //StartHitbox(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
                 AttackOrder++;
 
@@ -147,12 +147,12 @@ void Update()
             {
                 if (VerticalDirection == -1)
                 {
-                    RequestFireServerRpc(new int[] { 2, 1 }, NetObjRef);
+                    RequestFireServerRpc(new int[] { 2, 1 }, NetObjRef, HeldDirection);
                     //StartHitbox(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
                 }
                 else
                 {
-                    RequestFireServerRpc(new int[] { 2, 1 }, NetObjRef);
+                    RequestFireServerRpc(new int[] { 2, 1 }, NetObjRef, HeldDirection);
                     //StartHitbox(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
                 }
             }
@@ -160,12 +160,12 @@ void Update()
             {
                 if (Mathf.Abs(Direction) == 1)
                 {
-                    RequestFireServerRpc(new int[] { 2, 5 }, NetObjRef);
+                    RequestFireServerRpc(new int[] { 2, 5 }, NetObjRef, HeldDirection);
                     //StartHitbox(HeavyUniqueAttacks[5], Vector3.zero, Quaternion.identity, transform);
                 }
                 else
                 {
-                    RequestFireServerRpc(new int[] { 2, 0 }, NetObjRef);
+                    RequestFireServerRpc(new int[] { 2, 0 }, NetObjRef, HeldDirection);
                     //StartHitbox(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
                 }
             }
@@ -174,12 +174,12 @@ void Update()
         {
             if (VerticalDirection == -1)
             {
-                RequestFireServerRpc(new int[] { 2, 4 }, NetObjRef);
+                RequestFireServerRpc(new int[] { 2, 4 }, NetObjRef, HeldDirection);
                 //StartHitbox(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
-                RequestFireServerRpc(new int[] { 2, 3 }, NetObjRef);
+                RequestFireServerRpc(new int[] { 2, 3 }, NetObjRef, HeldDirection);
                 //StartHitbox(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
             }
         }
@@ -193,7 +193,7 @@ void Update()
     }*/
 
     [ClientRpc]
-    private void HitboxParametersClientRpc(NetworkObjectReference HurtBoxObjRef)
+    private void HitboxParametersClientRpc(NetworkObjectReference HurtBoxObjRef, float AttackDirection)
     {
 
         if (!HurtBoxObjRef.TryGet(out NetworkObject HurtBoxObj))
@@ -204,18 +204,18 @@ void Update()
 
         DeleteHitbox HurboxHitbox = HurtBoxObj.GetComponent<DeleteHitbox>();
 
-        HurtBoxObj.transform.localScale *= HeldDirection;
+        HurtBoxObj.transform.localScale *= AttackDirection;
         RecoveryCooldown = HurboxHitbox.Recovery;
-        HurboxHitbox.KnockbackValue.x *= HeldDirection;
-        HurboxHitbox.AddedVerticalMomentum *= HeldDirection;
-        HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * HeldDirection, HurboxHitbox.PositionValue.y, 0f);
+        HurboxHitbox.KnockbackValue.x *= AttackDirection;
+        HurboxHitbox.AddedVerticalMomentum *= AttackDirection;
+        HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * AttackDirection, HurboxHitbox.PositionValue.y, 0f);
         HurboxHitbox.Origin = gameObject;
 
         if (HurboxHitbox.Animation)
         {
             GetComponent<PlayerMovement>().VerticalAnimation = HurboxHitbox.VerticalAnimation;
             GetComponent<PlayerMovement>().HorizontalAnimation = HurboxHitbox.HorizontalAnimation;
-            GetComponent<PlayerMovement>().AnimationMovement(HeldDirection);
+            GetComponent<PlayerMovement>().AnimationMovement(AttackDirection);
             GetComponent<PlayerMovement>().Strafe = HurboxHitbox.Strafe;
         }
 
@@ -225,7 +225,7 @@ void Update()
     
     //Execute on server
     [ServerRpc]
-    private void RequestFireServerRpc(int[] AttackType, NetworkObjectReference Origin)
+    private void RequestFireServerRpc(int[] AttackType, NetworkObjectReference Origin, float AttackDirection)
     {
         //FireClientRpc(Attack, Position, Rotation, Origin);
         GameObject Attack = null;
@@ -260,7 +260,7 @@ void Update()
         AttackNetObj.TrySetParent(OriginObj);
 
         NetworkObjectReference AttackObjRef = AttackNetObj;
-        HitboxParametersClientRpc(AttackObjRef);
+        HitboxParametersClientRpc(AttackObjRef, AttackDirection);
     }
     /*
     //Execute on ALL clients
