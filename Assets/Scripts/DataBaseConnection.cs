@@ -5,20 +5,30 @@ using System.Text;
 using Unity.VisualScripting;
 using System;
 using UnityEditor.PackageManager.Requests;
+using Newtonsoft.Json;
 
 public class DataBaseConnection : MonoBehaviour
 {
 
     public static DataBaseConnection instance;
-    public NetworkSObject.PlayerData SObjPlayerData;
+
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         if (instance == null)
         {
             instance = this;
         }
     }
 
+    [System.Serializable]
+    public class PlayerData
+    {
+        public string SessionUsername;
+        public bool Success;
+    }
+
+    public PlayerData playerData;
 
     public IEnumerator Login(string username, string password)
     {
@@ -46,8 +56,9 @@ public class DataBaseConnection : MonoBehaviour
         }
         else
         {
-            SObjPlayerData = JsonUtility.FromJson<NetworkSObject.PlayerData>(request.downloadHandler.text);
-            print(SObjPlayerData.ToString());
+            playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+            Debug.Log(playerData.SessionUsername);
+            Debug.Log(playerData.Success);
             Debug.Log("Response: " + request.downloadHandler.text);
         }
     }
