@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using System;
 using UnityEditor.PackageManager.Requests;
 using Newtonsoft.Json;
+using Unity.Collections;
 
 public class DataBaseConnection : MonoBehaviour
 {
@@ -93,6 +94,36 @@ public class DataBaseConnection : MonoBehaviour
         }
     }
 
+    public IEnumerator StatsDate(int kills, int deaths, float dmg)
+    {
+        string json = JsonUtility.ToJson(new StatsData
+        {
+            Kills = kills,
+            Deaths = deaths,
+            Dmg = dmg
+        });
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+        UnityWebRequest request = new UnityWebRequest(
+            "http://10.200.14.25:5000/Stats",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+
+    }
+
 
     public IEnumerator TestRequest()
     {
@@ -120,6 +151,14 @@ public class DataBaseConnection : MonoBehaviour
     {
         public string username;
         public string password;
+    }
+
+    [System.Serializable]
+    class StatsData
+    {
+        public int Kills;
+        public int Deaths;
+        public float Dmg;
     }
 
 
