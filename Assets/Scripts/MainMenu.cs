@@ -10,6 +10,17 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] TMP_InputField usernameField;
     [SerializeField] TMP_InputField passwordField;
+    private bool Started = false;
+
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().name == "LogInScene" && !Started)
+        {
+            StartCoroutine(DataBaseConnection.instance.StatsUpdater(10, 1, 15000));
+            Started = true;
+        }
+    }
+
     public void Startgame()
     {
         SceneManager.LoadSceneAsync(1);

@@ -21,6 +21,7 @@ public class DataBaseConnection : MonoBehaviour
             instance = this;
         }
     }
+    
 
     [System.Serializable]
     public class PlayerData
@@ -94,8 +95,9 @@ public class DataBaseConnection : MonoBehaviour
         }
     }
 
-    public IEnumerator StatsDate(int kills, int deaths, float dmg)
+    public IEnumerator StatsUpdater(int kills, int deaths, float dmg)
     {
+
         string json = JsonUtility.ToJson(new StatsData
         {
             Kills = kills,
@@ -105,7 +107,7 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.25:5000/Stats",
+            "http://10.200.14.25:5000/StatsUpdater",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
