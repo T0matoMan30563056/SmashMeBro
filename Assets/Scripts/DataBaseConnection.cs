@@ -94,7 +94,6 @@ public class DataBaseConnection : MonoBehaviour
             Debug.Log("Response: " + request.downloadHandler.text);
         }
     }
-
     public IEnumerator StatsUpdater(int kills, int deaths, float dmg)
     {
 
