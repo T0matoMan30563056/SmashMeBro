@@ -1,9 +1,11 @@
 # SmashMeBro
 
 ## Projektbeskrivelse
-I dette prosjektet skal vi jobbe med å koble sammen vårt tidligere c# unity prosjekt med python og mysql. Vi ville eksperimentere med noe nytt og følte dette var et bra sted å starte. Vi bruker flask med webconnecter i c# for å kommunisere med vårt rassbarry pie. I dette prosjektet valgte vi å ha vårt python fil på rassbarrien so at spillet kan kjøres når som helst.
-Selve spillet er en blanding av brawlhalla og smash bros. Du kan velge spilleren din og spille som han, alle karakterer skal ha sin egne custom attacks og være forskjellige i sine egne måter
+### Formål med applikasjonen:
+Det vi Ønsker å oppnå med prosjektet er å laget et funskionerene spill, med loggin, registering og håndtering av spillerens stats og achivments ved bruk av c# som frontend og mariadb og python som beckend på rassbarry pi.
 
-#### Hvordan ser spillet ut
+### Brukerflyt:
+Brukeren kan lage en account som blir lagret i vårt Account tabell sammen med passord som er incryptert og dagen accounten er lagret. Etter dette kan spilleren spille spillet vårt som gjør at du kan få stats som kills, deaths og dmg som blir lagret i vårt Stats tabell med en forreig key i account_id, etter du har fått nokk kills så for du achivments for disse kills, deaths eller dmg som blir håndert av en trigger funskion inni mariadb som skjøres hver gang vi oppdaterer stats, det gjør sånn at du kan få achivments eller so og so mange kills.
 
-Du starter på en menu hvor du kan velge om å logge inn, registrere eller spille. du registrerer, logger inn og da kan du spille spillet. Hvis du prøver å spille uten å logge inn so står det "Guest" over karakteren din i steden for den session username. Hvis du er ikke logget inn så kan vi ikke tracke ting som Damage, Kills, Deaths og Data Registered.
+### Teknologier brukt:
+Vi bruker python, flask som beckend på vår rassbarry pi, med mariadb database og c# unity som frontend
