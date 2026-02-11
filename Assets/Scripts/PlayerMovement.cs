@@ -12,7 +12,10 @@ using UnityEngine.InputSystem.XR;
 
 public class PlayerMovement : NetworkBehaviour
 {
-    [Header("MatejDoingAnimations")]
+
+ 
+
+    [Header("MatejTryingToAnimate")]
     private bool isFacingRight = false;
 
 
@@ -256,13 +259,6 @@ public class PlayerMovement : NetworkBehaviour
         //This is a potential fix
         rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, Speed * MoveValue.x, LerpT(MomentumTime)), rb.linearVelocity.y);
 
-        // Update animations
-        PlayerAnimator.SetFloat("xVelocity", Mathf.Abs(MoveValue.x));
-        PlayerAnimator.SetFloat("yVelocity", MoveValue.y);
-        PlayerAnimator.SetBool("isJumping", !isGrounded);
-
-        // Flip sprite based on movement direction
-        FlipSprite(MoveValue.x);
 
         if (Jumped && !Strafe)
         {
@@ -347,19 +343,6 @@ public class PlayerMovement : NetworkBehaviour
     float LerpT(float t)
     {
         return Mathf.Pow(t, 3);
-    }
-
-    void FlipSprite(float direction)
-    {
-        if (direction == 0f) return;
-
-        if (isFacingRight && direction < 0f || !isFacingRight && direction > 0f)
-        {
-            isFacingRight = !isFacingRight;
-            Vector3 ls = SpriteTransform.localScale;
-            ls.x *= -1f;
-            SpriteTransform.localScale = ls;
-        }
     }
 
 }
