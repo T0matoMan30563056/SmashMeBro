@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StatUpdater : MonoBehaviour
@@ -8,12 +9,12 @@ public class StatUpdater : MonoBehaviour
 
     public class StatHolder
     {
-        public int Kills;
-        public int Deaths;
-        public float Dmg;
+        public int Kills = 0;
+        public int Deaths = 0;
+        public float Dmg = 0f;
     }
 
-    public StatHolder StatHolderObj;
+    public StatHolder StatHolderObj = new StatHolder();
 
 
     public static StatUpdater instance;
@@ -25,6 +26,7 @@ public class StatUpdater : MonoBehaviour
     //If logged in start the StatSender coroute
     void Start()
     {
+        Debug.Log(StatHolderObj);
         if (DataBaseConnection.instance.playerData.SessionUsername != null || DataBaseConnection.instance.playerData.SessionUsername != string.Empty)
         {
             StartCoroutine(StatSender());
@@ -41,13 +43,24 @@ public class StatUpdater : MonoBehaviour
         {
             yield return new WaitForSeconds(10f);
 
-            if (StatHolderObj != default(StatHolder))
+            if (StatHolderObj.Kills != 0 || StatHolderObj.Deaths != 0 || StatHolderObj.Dmg != 0f)
             {
-                DataBaseConnection.instance.StatsUpdater(StatHolderObj.Kills, StatHolderObj.Deaths, StatHolderObj.Dmg);
-                Debug.Log("Sendt!");
-                StatHolderObj = default;
+                StartCoroutine(DataBaseConnection.instance.StatsUpdater(StatHolderObj.Kills, StatHolderObj.Deaths, StatHolderObj.Dmg));
+                Debug.Log(StatHolderObj.Kills);
+                Debug.Log(StatHolderObj.Deaths);
+                Debug.Log(StatHolderObj.Dmg);
+
+                StatHolderObj = new StatHolder();
             }
-            else Debug.Log("Not sendt");
+
+
+            else
+            {
+                Debug.Log("Not sendt");
+                Debug.Log(StatHolderObj.Kills);
+                Debug.Log(StatHolderObj.Deaths);
+                Debug.Log(StatHolderObj.Dmg);
+            }
         }
     }
 }

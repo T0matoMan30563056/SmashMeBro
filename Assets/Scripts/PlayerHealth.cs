@@ -49,9 +49,13 @@ public class PlayerHealth : NetworkBehaviour
         {
             if (collision.GetComponent<DeleteHitbox>().Origin == gameObject) return;
 
-
-            //collision.GetComponent<DeleteHitbox>().GainJump();
-            DamageTaken += Mathf.Round(collision.GetComponent<DeleteHitbox>().Damage);
+            if (collision.GetComponent<DeleteHitbox>().Origin == collision.GetComponentInParent<PlayerMovement>().OwnerObject)
+            {
+                DamageTaken += Mathf.Round(collision.GetComponent<DeleteHitbox>().Damage);
+                StatUpdater.instance.StatHolderObj.Dmg += DamageTaken;
+                DamageTaken = 0f;
+            }
+            
             rb.linearVelocity = collision.GetComponent<DeleteHitbox>().KnockbackValue;
             if (playerMovement != null)
             {

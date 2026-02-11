@@ -6,11 +6,20 @@ public class DeathPlane : MonoBehaviour
     {
         collision.transform.position = default;
 
-        if (collision.GetComponent<PlayerMovement>() == null) return;
-
-        if (collision.GetComponent<PlayerMovement>().OwnerObject == collision.gameObject)
+        if (collision.GetComponent<PlayerMovement>() != null)
         {
-            StatUpdater.instance.StatHolderObj.Deaths += 1;
+            if (collision.GetComponent<PlayerMovement>().OwnerObject == collision.gameObject)
+            {
+                StatUpdater.instance.StatHolderObj.Deaths += 1;
+            }
+        }
+        else
+        {
+            //Temporary
+            if (collision.name == "Dummy")
+            {
+                StatUpdater.instance.StatHolderObj.Kills += 1;
+            }
         }
     }
 

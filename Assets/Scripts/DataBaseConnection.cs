@@ -96,7 +96,7 @@ public class DataBaseConnection : MonoBehaviour
     }
     public IEnumerator StatsUpdater(int kills, int deaths, float dmg)
     {
-
+        Debug.Log("Sendt!");
         string json = JsonUtility.ToJson(new StatsData
         {
             Kills = kills,
