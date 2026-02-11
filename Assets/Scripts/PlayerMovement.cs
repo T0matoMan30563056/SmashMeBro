@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using Unity.Mathematics;
 using Unity.Netcode;
@@ -11,6 +12,13 @@ using UnityEngine.InputSystem.XR;
 
 public class PlayerMovement : NetworkBehaviour
 {
+
+ 
+
+    [Header("MatejTryingToAnimate")]
+    private bool isFacingRight = false;
+
+
 
     [Header("Movement and Components")]
     private Rigidbody2D rb;
@@ -80,7 +88,7 @@ public class PlayerMovement : NetworkBehaviour
     //Start Variables
     private Vector3 StartScale;
     private float OriginalGravity;
-
+    Animator animator;
     public GameObject OwnerObject;
 
 
@@ -90,6 +98,7 @@ public class PlayerMovement : NetworkBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        isFacingRight = (SpriteTransform.localScale.x > 0);
         rb = GetComponent<Rigidbody2D>();
         playerAttacks = GetComponent<PlayerAttacks>();
         StartScale = SpriteTransform.localScale;
@@ -143,6 +152,7 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Jumped)
         {
+            
             JumpHoldTester += 1;
             if (JumpHoldTester == 2)
             {
@@ -151,6 +161,7 @@ public class PlayerMovement : NetworkBehaviour
         }
         else if (!Jumped)
         {
+            
             JumpHoldTester = 0;
         }
 
@@ -189,6 +200,8 @@ public class PlayerMovement : NetworkBehaviour
             }
         }
 
+
+
         if (isDashing)
         {
 
@@ -225,15 +238,15 @@ public class PlayerMovement : NetworkBehaviour
         MoveValue.x = Mathf.Round(MoveValue.x);
         MoveValue.y = Mathf.Round(MoveValue.y);
 
-        if (Mathf.Abs(MoveValue.x) == 1f)
-        {
-            SpriteTransform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
-            PlayerAnimator.SetBool("Running", true);
-        }
-        else
-        {
-            PlayerAnimator.SetBool("Running", false);
-        }
+        //if (Mathf.Abs(MoveValue.x) == 1f)
+        //{
+        //    SpriteTransform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
+        //    PlayerAnimator.SetBool("Running", true);
+        //}
+        //else
+        //{
+        //    PlayerAnimator.SetBool("Running", false);
+        //}
 
         playerAttacks.Direction = MoveValue.x;
         playerAttacks.VerticalDirection = MoveValue.y;
@@ -276,15 +289,22 @@ public class PlayerMovement : NetworkBehaviour
             StartCoroutine(Dash());
         }
 
+        // JUMP
+
+
         if (isGrounded && !isInside && JumpBuffer && !Strafe)
         {
+           
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
             InputBuffer = 0f;
         }
 
+      
 
 
-        InputBuffer -= Time.deltaTime;
+
+
+            InputBuffer -= Time.deltaTime;
         InputBuffer = Mathf.Clamp(InputBuffer, 0f, BufferDuration);
 
         if (InputBuffer == 0)
