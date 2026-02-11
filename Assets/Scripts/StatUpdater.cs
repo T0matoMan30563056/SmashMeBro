@@ -16,7 +16,7 @@ public class StatUpdater : MonoBehaviour
     public StatHolder StatHolderObj;
 
 
-    public StatUpdater instance;
+    public static StatUpdater instance;
     public void Awake()
     {
         instance = this;

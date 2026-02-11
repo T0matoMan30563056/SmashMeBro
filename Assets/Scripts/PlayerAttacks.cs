@@ -262,14 +262,5 @@ void Update()
         NetworkObjectReference AttackObjRef = AttackNetObj;
         HitboxParametersClientRpc(AttackObjRef, AttackDirection);
     }
-    /*
-    //Execute on ALL clients
-    [ClientRpc]
-    private void FireClientRpc(GameObject Attack, Vector3 Position, Quaternion Rotation, Transform Origin)
-    {
-        if (IsOwner) return;
-        GameObject HurtBoxObj = Instantiate(Attack, Position, Rotation, Origin);
-        HitboxParameters(HurtBoxObj);
-    }
-    */
+
 }

@@ -81,6 +81,7 @@ public class PlayerMovement : NetworkBehaviour
     private Vector3 StartScale;
     private float OriginalGravity;
 
+    public GameObject OwnerObject;
 
 
     //Vector2 MoveValue = moveAction.ReadValue<Vector2>();
@@ -111,6 +112,10 @@ public class PlayerMovement : NetworkBehaviour
             enabled = false;
             GetComponent<PlayerInput>().enabled = false;
             return;
+        }
+        else
+        {
+            OwnerObject = gameObject;
         }
     }
 

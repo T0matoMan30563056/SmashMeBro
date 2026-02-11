@@ -2,15 +2,16 @@ using UnityEngine;
 
 public class DeathPlane : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        collision.transform.position = default;
+
+        if (collision.GetComponent<PlayerMovement>() == null) return;
+
+        if (collision.GetComponent<PlayerMovement>().OwnerObject == collision.gameObject)
+        {
+            StatUpdater.instance.StatHolderObj.Deaths += 1;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
