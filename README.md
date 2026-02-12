@@ -1,7 +1,7 @@
 # Prosjektbeskrivelse – IT-utviklingsprosjekt (2IMI)
 ## SmashBros
 ________________________________________
-Deltakere
+Deltakere <br>
 Matej Mikic – Backend / PythonFlask <br>
 Eduard Mannino – Frontend / c# unity
 ________________________________________
