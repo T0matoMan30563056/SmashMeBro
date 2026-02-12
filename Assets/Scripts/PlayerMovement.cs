@@ -42,7 +42,7 @@ public class PlayerMovement : NetworkBehaviour
     float InputBuffer = 0f;
     bool JumpBuffer = false;
     [SerializeField] float BufferDuration;
-    private bool Jumped = false;
+    public bool Jumped = false;
     private int JumpHoldTester = 0;
     public bool AirJump = true;
     [SerializeField] private float WallVerticalVelocity;

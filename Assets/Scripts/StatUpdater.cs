@@ -46,20 +46,8 @@ public class StatUpdater : MonoBehaviour
             if (StatHolderObj.Kills != 0 || StatHolderObj.Deaths != 0 || StatHolderObj.Dmg != 0f)
             {
                 StartCoroutine(DataBaseConnection.instance.StatsUpdater(StatHolderObj.Kills, StatHolderObj.Deaths, StatHolderObj.Dmg));
-                Debug.Log(StatHolderObj.Kills);
-                Debug.Log(StatHolderObj.Deaths);
-                Debug.Log(StatHolderObj.Dmg);
 
                 StatHolderObj = new StatHolder();
-            }
-
-
-            else
-            {
-                Debug.Log("Not sendt");
-                Debug.Log(StatHolderObj.Kills);
-                Debug.Log(StatHolderObj.Deaths);
-                Debug.Log(StatHolderObj.Dmg);
             }
         }
     }

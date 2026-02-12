@@ -202,21 +202,21 @@ void Update()
             return;
         }
 
-        DeleteHitbox HurboxHitbox = HurtBoxObj.GetComponent<DeleteHitbox>();
+        DeleteHitbox HurtboxHitbox = HurtBoxObj.GetComponent<DeleteHitbox>();
 
         HurtBoxObj.transform.localScale *= AttackDirection;
-        RecoveryCooldown = HurboxHitbox.Recovery;
-        HurboxHitbox.KnockbackValue.x *= AttackDirection;
-        HurboxHitbox.AddedVerticalMomentum *= AttackDirection;
-        HurtBoxObj.transform.localPosition = new Vector3(HurboxHitbox.PositionValue.x * AttackDirection, HurboxHitbox.PositionValue.y, 0f);
-        HurboxHitbox.Origin = gameObject;
+        RecoveryCooldown = HurtboxHitbox.Recovery;
+        HurtboxHitbox.KnockbackValue.x *= AttackDirection;
+        HurtboxHitbox.AddedVerticalMomentum *= AttackDirection;
+        HurtboxHitbox.transform.localPosition = new Vector3(HurtboxHitbox.PositionValue.x * AttackDirection, HurtboxHitbox.PositionValue.y, 0f);
+        HurtboxHitbox.Origin = gameObject;
 
-        if (HurboxHitbox.Animation)
+        if (HurtboxHitbox.Animation)
         {
-            GetComponent<PlayerMovement>().VerticalAnimation = HurboxHitbox.VerticalAnimation;
-            GetComponent<PlayerMovement>().HorizontalAnimation = HurboxHitbox.HorizontalAnimation;
+            GetComponent<PlayerMovement>().VerticalAnimation = HurtboxHitbox.VerticalAnimation;
+            GetComponent<PlayerMovement>().HorizontalAnimation = HurtboxHitbox.HorizontalAnimation;
             GetComponent<PlayerMovement>().AnimationMovement(AttackDirection);
-            GetComponent<PlayerMovement>().Strafe = HurboxHitbox.Strafe;
+            GetComponent<PlayerMovement>().Strafe = HurtboxHitbox.Strafe;
         }
 
         Recovery = true;
@@ -244,7 +244,7 @@ void Update()
         {
             Attack = LightUniqueAttacks[AttackType[1]];
         }
-        else if (AttackType[0] == 2) // AttackType[0] = 1 means that the attack is an unique heavy attack
+        else if (AttackType[0] == 2) // AttackType[0] = 2 means that the attack is an unique heavy attack
         {
             Attack = HeavyUniqueAttacks[AttackType[1]];
         }
@@ -256,7 +256,7 @@ void Update()
 
         GameObject HurtBoxObj = Instantiate(Attack, OriginObj.transform.position, Quaternion.identity);
         NetworkObject AttackNetObj = HurtBoxObj.GetComponent<NetworkObject>();
-        HurtBoxObj.GetComponent<NetworkObject>().Spawn();
+        AttackNetObj.Spawn();
         AttackNetObj.TrySetParent(OriginObj);
 
         NetworkObjectReference AttackObjRef = AttackNetObj;
