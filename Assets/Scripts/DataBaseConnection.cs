@@ -2,17 +2,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text;
-using Unity.VisualScripting;
-using System;
-using UnityEditor.PackageManager.Requests;
-using Newtonsoft.Json;
-using Unity.Collections;
 
+
+//Håndterer kommunikasjon mellom unity og flask
+//Lagrer klassene for andre skripts
 public class DataBaseConnection : MonoBehaviour
 {
 
     public static DataBaseConnection instance;
-
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -32,6 +29,13 @@ public class DataBaseConnection : MonoBehaviour
 
     public PlayerData playerData;
 
+
+
+    //Gjør parametrene om til en Json
+    //Lager en WebRequest til flask
+    //Kjører Login funksjonen i flask
+    //Uploader Jsonen til flask
+    //Lagrer return verdien som en Json
     public IEnumerator Login(string username, string password)
     {
         string json = JsonUtility.ToJson(new LoginData
@@ -65,6 +69,11 @@ public class DataBaseConnection : MonoBehaviour
         }
     }
 
+    //Gjør parametrene om til en Json
+    //Lager en WebRequest til flask
+    //Kjører SignUp funksjonen i flask
+    //Uploader Jsonen til flask
+    //Lagrer return verdien som en Json
     public IEnumerator SignIn(string username, string password)
     {
         string json = JsonUtility.ToJson(new LoginData
@@ -94,6 +103,13 @@ public class DataBaseConnection : MonoBehaviour
             Debug.Log("Response: " + request.downloadHandler.text);
         }
     }
+
+
+    //Gjør parametrene om til en Json
+    //Lager en WebRequest til flask
+    //Kjører StatUpdater funksjonen i flask
+    //Uploader Jsonen til flask
+    //Lagrer return verdien som en Json
     public IEnumerator StatsUpdater(int kills, int deaths, float dmg)
     {
         Debug.Log("Sendt!");
@@ -125,7 +141,7 @@ public class DataBaseConnection : MonoBehaviour
 
     }
 
-
+    //Test funksjon for å teste tilkobling med flask
     public IEnumerator TestRequest()
     {
         UnityWebRequest request = new UnityWebRequest(

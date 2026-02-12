@@ -22,7 +22,6 @@ public class DeleteHitbox : NetworkBehaviour
 
     //public bool GivesJump;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartCoroutine(DeleteWithDelay());
