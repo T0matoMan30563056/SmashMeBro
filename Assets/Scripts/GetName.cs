@@ -1,8 +1,11 @@
 using TMPro;
 using UnityEngine;
 
+
 public class GetName : MonoBehaviour
 {
+
+    public bool CrackingFemboysRN = true;
     TMP_Text Text;
 
 

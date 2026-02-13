@@ -13,6 +13,7 @@ public class PlayerMovement : NetworkBehaviour
 {
 
     [Header("Movement and Components")]
+    public float SixSeven = 67;
     private Rigidbody2D rb;
     [SerializeField] private float Speed;
     private PlayerAttacks playerAttacks;
@@ -31,8 +32,8 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] Transform LeftCheck;
     [SerializeField] LayerMask ground;
     [SerializeField] LayerMask wall;
-    bool isGrounded;
-    bool isInside;
+    public bool isGrounded;
+    public bool isInside;
     int isTouchingWall = 0;
 
 
@@ -47,6 +48,7 @@ public class PlayerMovement : NetworkBehaviour
     public bool AirJump = true;
     [SerializeField] private float WallVerticalVelocity;
 
+    public bool GroundJump = false;
 
 
     [Header("Dashing")]
@@ -83,6 +85,7 @@ public class PlayerMovement : NetworkBehaviour
 
     public GameObject OwnerObject;
 
+    
 
     //Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
@@ -278,8 +281,13 @@ public class PlayerMovement : NetworkBehaviour
 
         if (isGrounded && !isInside && JumpBuffer && !Strafe)
         {
+            GroundJump = true;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
             InputBuffer = 0f;
+        }
+        else
+        {
+            GroundJump = false;
         }
 
 

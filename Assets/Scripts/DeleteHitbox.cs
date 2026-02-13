@@ -12,7 +12,7 @@ public class DeleteHitbox : NetworkBehaviour
     public Vector2 KnockbackValue;
     public Vector2 PositionValue;
     public GameObject Origin;
-
+    public bool WeLoveFemboys = true;
     public AnimationCurve VerticalAnimation;
     public AnimationCurve HorizontalAnimation;
     public bool Animation;

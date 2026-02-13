@@ -346,6 +346,7 @@ GameObject:
   - component: {fileID: 503597845291750359}
   - component: {fileID: 8893110539316738678}
   - component: {fileID: 6385226453966419485}
+  - component: {fileID: 2996641323403822820}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -508,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4264252225
+  GlobalObjectIdHash: 1175095013
   InScenePlacedSourceGlobalObjectIdHash: 1175095013
   DeferredDespawnTick: 0
   Ownership: 1
@@ -549,6 +550,7 @@ MonoBehaviour:
     m_Bits: 128
   Jump: 10
   BufferDuration: 0.2
+  Jumped: 0
   AirJump: 1
   WallVerticalVelocity: 10
   isDashing: 0
@@ -862,6 +864,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerNetwork
   ShowTopMostFoldoutHeaderGroup: 1
   _cheapInterpolationTime: 0.05
+--- !u!114 &2996641323403822820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3467436157580718423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fe9491dab10a94f8aa307a5af2c95e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Animation
+  animator: {fileID: 2903413630545837576}
 --- !u!1 &6225196200550419685
 GameObject:
   m_ObjectHideFlags: 0

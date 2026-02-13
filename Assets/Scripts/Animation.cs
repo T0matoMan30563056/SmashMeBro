@@ -1,22 +1,40 @@
+using System;
 using UnityEngine;
 
 public class Animation : MonoBehaviour 
 {
-    private Animator animator;
-    private Rigidbody rb;
-    
+    [SerializeField] private Animator animator;
+    private Rigidbody2D rb;
+    private PlayerMovement PM;
+
     private void Start()
     {
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
+        PM = GetComponent<PlayerMovement>();
     }
 
     private void Update()
     {
-        animator.SetFloat("xVelocity", rb.linearVelocity.x);
-        animator.SetFloat("yValocity", rb.linearVelocity.y);
-        animator.SetBool("isJumping", GetComponent<PlayerMovement>().Jumped);
+        animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocity.x));
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
+        animator.SetBool("isJumping", PM.GroundJump);
+
         
+
+
+        if (PM.isGrounded && !PM.isInside)
+        {
+            animator.SetBool("isGrounded", true);
+        }
+        else
+        {
+            animator.SetBool("isGrounded", false);
+        }
+
+
+        
+
     }
+
 
 }
