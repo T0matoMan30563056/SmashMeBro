@@ -11,6 +11,7 @@ using static UnityEngine.UI.Image;
 
 public class PlayerAttacks : NetworkBehaviour
 {
+    [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] AttackSequence;
     [SerializeField] private GameObject[] LightUniqueAttacks;
     [SerializeField] private GameObject[] HeavyUniqueAttacks;
@@ -64,6 +65,7 @@ void Update()
         if (Mouse.current.leftButton.wasPressedThisFrame && !Recovery)
         {
             LightAttacks();
+
         }
         else if (Mouse.current.rightButton.wasPressedThisFrame && !Recovery)
         {
@@ -97,6 +99,7 @@ void Update()
             {
                 RequestFireServerRpc(new int[] {1, 0}, NetObjRef, HeldDirection);
                 //StartHitbox(LightUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
+  
             }
             else
             {
@@ -104,12 +107,14 @@ void Update()
                 {
                     RequestFireServerRpc(new int[] { 1, 2 }, NetObjRef, HeldDirection);
                     //StartHitbox(LightUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
-                    
+
+
                 }
                 else
                 {
                     RequestFireServerRpc(new int[] { 1, 1 }, NetObjRef, HeldDirection);
                     //StartHitbox(LightUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+   
                 }
             }
         }
@@ -118,15 +123,18 @@ void Update()
             if (Mathf.Abs(Direction) == 1)
             {
                 RequestFireServerRpc(new int[] { 1, 3 }, NetObjRef, HeldDirection);
-                //StartHitbox(LightUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
+                //StartHitbox(LightUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform
+                animator.SetTrigger("LightAttack");
+
             }
             else
             {
                 RequestFireServerRpc(new int[] { 0, AttackOrder}, NetObjRef, HeldDirection);
                 //StartHitbox(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
                 AttackOrder++;
-
+                animator.SetTrigger("LightAttack");
                 ResetTimeRemaining = ResetTime;
+
             }
 
         }
@@ -149,6 +157,7 @@ void Update()
                 {
                     RequestFireServerRpc(new int[] { 2, 1 }, NetObjRef, HeldDirection);
                     //StartHitbox(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
+                    
                 }
                 else
                 {

@@ -264,6 +264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bb9a577783b9d448829338b0fe53f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  CrackingFemboysRN: 1
 --- !u!1 &3177140270845831096
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,6 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
+  animator: {fileID: 2903413630545837576}
   Speed: 6
   PlayerAnimator: {fileID: 2903413630545837576}
   SpriteTransform: {fileID: 7089212783578139829}
@@ -548,11 +550,14 @@ MonoBehaviour:
   wall:
     serializedVersion: 2
     m_Bits: 128
+  isGrounded: 0
+  isInside: 0
   Jump: 10
   BufferDuration: 0.2
   Jumped: 0
   AirJump: 1
   WallVerticalVelocity: 10
+  GroundJump: 0
   isDashing: 0
   DashPower: 37
   DashingTime: 0.13
@@ -814,6 +819,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
+  animator: {fileID: 2903413630545837576}
   AttackSequence:
   - {fileID: 4643043556677592188, guid: ca1685c7127d29b4d93963a4f41f568d, type: 3}
   - {fileID: 4643043556677592188, guid: ca1685c7127d29b4d93963a4f41f568d, type: 3}

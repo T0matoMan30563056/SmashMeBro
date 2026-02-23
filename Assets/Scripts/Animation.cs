@@ -17,22 +17,17 @@ public class Animation : MonoBehaviour
     {
         animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocity.x));
         animator.SetFloat("yVelocity", rb.linearVelocity.y);
-        animator.SetBool("isJumping", PM.GroundJump);
+        animator.SetBool("isGrounded", PM.isGrounded);
 
-        
-
-
-        if (PM.isGrounded && !PM.isInside)
-        {
-            animator.SetBool("isGrounded", true);
-        }
-        else
-        {
-            animator.SetBool("isGrounded", false);
-        }
+   
 
 
-        
+
+
+
+
+
+
 
     }
 

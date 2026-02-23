@@ -11,9 +11,9 @@ using UnityEngine.InputSystem.XR;
 
 public class PlayerMovement : NetworkBehaviour
 {
+    [SerializeField] private Animator animator;
 
     [Header("Movement and Components")]
-    public float SixSeven = 67;
     private Rigidbody2D rb;
     [SerializeField] private float Speed;
     private PlayerAttacks playerAttacks;
@@ -207,15 +207,25 @@ public class PlayerMovement : NetworkBehaviour
         if (Physics2D.OverlapCircle(RightCheck.position, 0.1f, wall))
         {
             isTouchingWall = 1;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", true);
+
 
         }
         else if (Physics2D.OverlapCircle(LeftCheck.position, 0.1f, wall))
         {
             isTouchingWall = -1;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", true);
+
+
         }
         else
         {
             isTouchingWall = 0;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", false);
+
         }
 
 
@@ -231,11 +241,11 @@ public class PlayerMovement : NetworkBehaviour
         if (Mathf.Abs(MoveValue.x) == 1f)
         {
             SpriteTransform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
-            PlayerAnimator.SetBool("Running", true);
+            PlayerAnimator.SetBool("isRunning", true);
         }
         else
         {
-            PlayerAnimator.SetBool("Running", false);
+            PlayerAnimator.SetBool("isRunning", false);
         }
 
         playerAttacks.Direction = MoveValue.x;

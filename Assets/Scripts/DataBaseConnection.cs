@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text;
-public bool WeLoveFemboys = true;
 
 //Håndterer kommunikasjon mellom unity og flask
 //Lagrer klassene for andre skripts
