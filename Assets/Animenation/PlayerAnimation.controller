@@ -26,7 +26,7 @@ AnimatorStateMachine:
     m_Position: {x: 450, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1426938949786741031}
-    m_Position: {x: 450, y: 110, z: 0}
+    m_Position: {x: 450, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2513579148545085710}
     m_Position: {x: -30, y: 240, z: 0}
@@ -335,7 +335,7 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: isTouchingWall
-    m_Type: 3
+    m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -412,7 +412,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 289664f4adefa334b885e1b4cbef2faf, type: 2}
+    m_Motion: {fileID: 7400000, guid: ee50de9f916b42242a31319204612842, type: 2}
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -420,7 +420,7 @@ BlendTree:
     m_DirectBlendParameter: xVelocity
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: ee50de9f916b42242a31319204612842, type: 2}
+    m_Motion: {fileID: 7400000, guid: 289664f4adefa334b885e1b4cbef2faf, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -618,7 +618,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.73214287
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
