@@ -152,16 +152,14 @@ public class PlayerMovement : NetworkBehaviour
             isTouchingWall = 1;
             animator.SetFloat("isTouchingWall", isTouchingWall);
             animator.SetBool("isSliding", true);
-
-
         }
+
         else if (Physics2D.OverlapCircle(LeftCheck.position, 0.1f, wall))
         {
             isTouchingWall = -1;
+            SpriteTransform.localScale = new Vector3(Mathf.Abs(StartScale.x), StartScale.y, StartScale.z);
             animator.SetFloat("isTouchingWall", isTouchingWall);
             animator.SetBool("isSliding", true);
-
-
         }
         else
         {
@@ -235,6 +233,7 @@ public class PlayerMovement : NetworkBehaviour
         {
 
             rb.gravityScale = 0f;
+
             rb.linearVelocity = new Vector2(playerAttacks.Direction * DashPower, 0f);
 
             InputBuffer = 0f;
@@ -250,7 +249,7 @@ public class PlayerMovement : NetworkBehaviour
         MoveValue.x = Mathf.Round(MoveValue.x);
         MoveValue.y = Mathf.Round(MoveValue.y);
 
-        if (Mathf.Abs(MoveValue.x) == 1f)
+        if (Mathf.Abs(MoveValue.x) == 1f && isTouchingWall == 0)
         {
             SpriteTransform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
             PlayerAnimator.SetBool("isRunning", true);
@@ -330,9 +329,11 @@ public class PlayerMovement : NetworkBehaviour
     {
         canDash= false;
         isDashing = true;
+        animator.SetBool("isDashing", isDashing);
         yield return new WaitForSeconds(DashingTime);
         rb.gravityScale = OriginalGravity;
         isDashing = false;
+        animator.SetBool("isDashing", false);
         yield return new WaitForSeconds(DashingCooldown);
         canDash = true;
 

@@ -20,15 +20,6 @@ public class Animation : MonoBehaviour
         animator.SetFloat("yVelocity", rb.linearVelocity.y);
         animator.SetBool("isGrounded", PM.isGrounded);
 
-   
-
-
-
-
-
-
-
-
 
     }
 

@@ -133,7 +133,7 @@ void Update()
                 AttackOrder++;
                 animator.SetFloat("AttackCombo", AttackOrder);
                 animator.SetTrigger("LightAttack");
-                Debug.Log(AttackOrder);
+
 
                 ResetTimeRemaining = ResetTime;
 
