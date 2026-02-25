@@ -34,7 +34,7 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] LayerMask wall;
     public bool isGrounded;
     public bool isInside;
-    int isTouchingWall = 0;
+    public int isTouchingWall = 0;
 
 
 
@@ -77,7 +77,7 @@ public class PlayerMovement : NetworkBehaviour
     private float CurrentVerticalMomentum = 0;
     public float MomentumTime = 1;
     public float MomentumLerpMultiplier = 1;
-
+    private bool Flip = false;
 
     //Start Variables
     private Vector3 StartScale;
@@ -144,6 +144,33 @@ public class PlayerMovement : NetworkBehaviour
     void Update()
     {
 
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
+        isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
+
+        if (Physics2D.OverlapCircle(RightCheck.position, 0.1f, wall))
+        {
+            isTouchingWall = 1;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", true);
+
+
+        }
+        else if (Physics2D.OverlapCircle(LeftCheck.position, 0.1f, wall))
+        {
+            isTouchingWall = -1;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", true);
+
+
+        }
+        else
+        {
+            isTouchingWall = 0;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", false);
+
+        }
+
         if (Jumped)
         {
             JumpHoldTester += 1;
@@ -167,7 +194,19 @@ public class PlayerMovement : NetworkBehaviour
         }
         if (isStunned)
         {
-            return;
+            if (Mathf.Abs(isTouchingWall) == 1f && !Flip)
+            {
+                ExtraVertcalMomentum *= -1;
+                Flip = true;
+            }
+            else if(isTouchingWall == 0f)
+            {
+                Flip = false;
+            }
+        }
+        else
+        {
+            Flip = false;
         }
 
         if (AnimationStun)
@@ -201,33 +240,6 @@ public class PlayerMovement : NetworkBehaviour
             InputBuffer = 0f;
             return;
         }
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
-        isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
-
-        if (Physics2D.OverlapCircle(RightCheck.position, 0.1f, wall))
-        {
-            isTouchingWall = 1;
-            animator.SetFloat("isTouchingWall", isTouchingWall);
-            animator.SetBool("isSliding", true);
-
-
-        }
-        else if (Physics2D.OverlapCircle(LeftCheck.position, 0.1f, wall))
-        {
-            isTouchingWall = -1;
-            animator.SetFloat("isTouchingWall", isTouchingWall);
-            animator.SetBool("isSliding", true);
-
-
-        }
-        else
-        {
-            isTouchingWall = 0;
-            animator.SetFloat("isTouchingWall", isTouchingWall);
-            animator.SetBool("isSliding", false);
-
-        }
-
 
         if (isGrounded && !isInside)
         {

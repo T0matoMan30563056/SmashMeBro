@@ -124,7 +124,6 @@ void Update()
             {
                 RequestFireServerRpc(new int[] { 1, 3 }, NetObjRef, HeldDirection);
                 //StartHitbox(LightUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform
-                animator.SetTrigger("LightAttack");
 
             }
             else
@@ -132,7 +131,10 @@ void Update()
                 RequestFireServerRpc(new int[] { 0, AttackOrder}, NetObjRef, HeldDirection);
                 //StartHitbox(AttackSequence[AttackOrder], Vector3.zero, Quaternion.identity, transform);
                 AttackOrder++;
+                animator.SetFloat("AttackCombo", AttackOrder);
                 animator.SetTrigger("LightAttack");
+                Debug.Log(AttackOrder);
+
                 ResetTimeRemaining = ResetTime;
 
             }

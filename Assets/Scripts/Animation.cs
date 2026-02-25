@@ -7,6 +7,7 @@ public class Animation : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerMovement PM;
 
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
