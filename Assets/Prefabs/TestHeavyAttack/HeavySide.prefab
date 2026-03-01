@@ -184,6 +184,7 @@ MonoBehaviour:
   KnockbackValue: {x: 10, y: 2}
   PositionValue: {x: 0.75, y: 0}
   Origin: {fileID: 0}
+  WeLoveFemboys: 1
   VerticalAnimation:
     serializedVersion: 2
     m_Curve:

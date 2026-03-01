@@ -19,6 +19,7 @@ public class DeleteHitbox : NetworkBehaviour
     public bool Strafe;
     public float AddedVerticalMomentum;
 
+    public bool LocalHitbox = false;
 
     //public bool GivesJump;
 
@@ -31,10 +32,17 @@ public class DeleteHitbox : NetworkBehaviour
     {
         yield return new WaitForSeconds(Duration);
 
-        DeleteOnServerRpc();
+        if (LocalHitbox)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            DeleteOnServerRpc();
+        }
     }
 
-    [ServerRpc]
+    [Rpc(SendTo.Server)]
     private void DeleteOnServerRpc()
     {
         NetworkObject.Despawn(true);
