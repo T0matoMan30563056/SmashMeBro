@@ -119,6 +119,7 @@ public class PlayerMovement : NetworkBehaviour
         else
         {
             OwnerObject = gameObject;
+            Camera.main.GetComponent<CameraPos>().SetTarget(transform);
         }
     }
 
