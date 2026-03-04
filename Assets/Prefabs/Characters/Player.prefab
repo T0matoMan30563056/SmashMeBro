@@ -264,7 +264,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bb9a577783b9d448829338b0fe53f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  CrackingFemboysRN: 1
 --- !u!1 &3177140270845831096
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4264252225
+  GlobalObjectIdHash: 1175095013
   InScenePlacedSourceGlobalObjectIdHash: 1175095013
   DeferredDespawnTick: 0
   Ownership: 1
@@ -855,6 +854,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   ShowTopMostFoldoutHeaderGroup: 1
+  MaxHitpoints: 1000
+  Hitpoints: 0
+  KnockbackScalar: 1.5
   InvincibilityDuration: 0
   Stunned: 0
 --- !u!114 &6385226453966419485

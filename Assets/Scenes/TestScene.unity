@@ -819,6 +819,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
+  MaxHitpoints: 1000
+  Hitpoints: 0
+  KnockbackScalar: 1
   InvincibilityDuration: 0.3
   Stunned: 0
 --- !u!50 &798756294

@@ -10,6 +10,11 @@ public class PlayerHealth : NetworkBehaviour
 
     private float DamageTaken = 0;
 
+    public float MaxHitpoints;
+    public float Hitpoints;
+
+    [Range(1f, 2f)] public float KnockbackScalar;
+
     private bool Invincibility = false;
 
     [SerializeField] private float InvincibilityDuration;
@@ -36,6 +41,8 @@ public class PlayerHealth : NetworkBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody2D>();
+        Hitpoints = MaxHitpoints;
+
 
     }
 
@@ -55,16 +62,36 @@ public class PlayerHealth : NetworkBehaviour
                 StatUpdater.instance.StatHolderObj.Dmg += DamageTaken;
                 DamageTaken = 0f;
             }
-            
+
+
+            Hitpoints -= collision.GetComponent<DeleteHitbox>().Damage;
+
+            if (Hitpoints <= 0f)
+            {
+                Death();
+            }
+
+
             rb.linearVelocity = collision.GetComponent<DeleteHitbox>().KnockbackValue;
             if (playerMovement != null)
             {
+
+
                 playerMovement.MomentumTime = 0;
                 playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum;
             }
             StartCoroutine(DamageBuffer());
         }
     }
+
+
+    private void Death()
+    {
+        Hitpoints = MaxHitpoints;
+        transform.position = transform.position.normalized;
+    }
+
+
 
     private IEnumerator DamageBuffer()
     {
