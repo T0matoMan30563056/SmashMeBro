@@ -509,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1175095013
+  GlobalObjectIdHash: 4264252225
   InScenePlacedSourceGlobalObjectIdHash: 1175095013
   DeferredDespawnTick: 0
   Ownership: 1
@@ -831,7 +831,7 @@ MonoBehaviour:
   - {fileID: 8056455031600999143, guid: 6888d47da41fbcd4c8afffb82704b182, type: 3}
   HeavyUniqueAttacks:
   - {fileID: 7050065763516548086, guid: ec63f4358f930884aae23034ab757bdf, type: 3}
-  - {fileID: 8151053973276798903, guid: 7dfe040ca1ed3fa4fa3ff9e94e5c6231, type: 3}
+  - {fileID: 3660064266588810616, guid: 3580ceed79fefb7479edbcc0d095b748, type: 3}
   - {fileID: 663500807968630148, guid: ce2a05fd7b1c40145986a0dd331dfeb1, type: 3}
   - {fileID: 6442646970668613438, guid: 04d4f19ce37d9ee45819dc1ef69facb4, type: 3}
   - {fileID: 9131777425444720818, guid: 408a1cff84bc8f64f8397092925e64ef, type: 3}

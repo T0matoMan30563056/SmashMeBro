@@ -9,6 +9,8 @@ public class DeathPlane : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Hurtbox")) return;
+
         collision.transform.position = default;
 
         if (collision.GetComponent<PlayerMovement>() != null)

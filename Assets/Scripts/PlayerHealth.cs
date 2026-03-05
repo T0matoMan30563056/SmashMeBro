@@ -3,6 +3,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerHealth : NetworkBehaviour
 {
@@ -24,6 +25,7 @@ public class PlayerHealth : NetworkBehaviour
     public bool Stunned = false;
 
     private PlayerMovement playerMovement;
+
 
 
 
@@ -54,31 +56,50 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (collision.CompareTag("Hurtbox") && !Invincibility && collision.GetComponent<DeleteHitbox>() != null)
         {
-            if (collision.GetComponent<DeleteHitbox>().Origin == gameObject) return;
+            DeleteHitbox Hitbox = collision.GetComponent<DeleteHitbox>();
 
-            if (collision.GetComponent<DeleteHitbox>().Origin == collision.GetComponentInParent<PlayerMovement>().OwnerObject)
+            if (Hitbox.Origin == gameObject) return;
+
+            if (Hitbox.Origin == collision.GetComponentInParent<PlayerMovement>().OwnerObject)
             {
-                DamageTaken += Mathf.Round(collision.GetComponent<DeleteHitbox>().Damage);
+                DamageTaken += Mathf.Round(Hitbox.Damage);
                 StatUpdater.instance.StatHolderObj.Dmg += DamageTaken;
                 DamageTaken = 0f;
             }
 
 
-            Hitpoints -= collision.GetComponent<DeleteHitbox>().Damage;
+            Hitpoints -= Hitbox.Damage;
 
             if (Hitpoints <= 0f)
             {
                 Death();
             }
-
-
-            rb.linearVelocity = collision.GetComponent<DeleteHitbox>().KnockbackValue;
-            if (playerMovement != null)
+            if (Hitbox.KnockbackFromCenter)
             {
 
+                float CosFromCenter = Mathf.Cos(Vector3.Angle(transform.position, Hitbox.TopPoint.transform.position) * Mathf.Deg2Rad);
+                float SinFromCenter = Mathf.Sin(Vector3.Angle(transform.position, Hitbox.TopPoint.transform.position) * Mathf.Deg2Rad);
+                Debug.Log(CosFromCenter);
+                Debug.Log(SinFromCenter);
 
-                playerMovement.MomentumTime = 0;
-                playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum;
+
+                rb.linearVelocity = new Vector2(Hitbox.KnockbackValue.x * SinFromCenter, Hitbox.KnockbackValue.y * CosFromCenter);
+                if (playerMovement != null)
+                {
+                    playerMovement.MomentumTime = 0;
+                    playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum * SinFromCenter;
+                }
+            }
+            else
+            {
+                rb.linearVelocity = collision.GetComponent<DeleteHitbox>().KnockbackValue;
+                if (playerMovement != null)
+                {
+
+
+                    playerMovement.MomentumTime = 0;
+                    playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum;
+                }
             }
             StartCoroutine(DamageBuffer());
         }

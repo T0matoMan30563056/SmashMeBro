@@ -227,8 +227,7 @@ void Update()
 
     private void InitAttack(int[] AttackType)
     {
-        Debug.Log(AttackType[0]);
-        Debug.Log(AttackType[1]);
+
 
         if (!IsServer)
         {
@@ -279,8 +278,11 @@ void Update()
 
         HurtBoxObj.transform.localScale *= AttackDirection;
         RecoveryCooldown = HurtboxHitbox.Recovery;
-        HurtboxHitbox.KnockbackValue.x *= AttackDirection;
-        HurtboxHitbox.AddedVerticalMomentum *= AttackDirection;
+        if (!HurtboxHitbox.KnockbackFromCenter)
+        {
+            HurtboxHitbox.KnockbackValue.x *= AttackDirection;
+            HurtboxHitbox.AddedVerticalMomentum *= AttackDirection;
+        }
         HurtboxHitbox.transform.localPosition = new Vector3(HurtboxHitbox.PositionValue.x * AttackDirection, HurtboxHitbox.PositionValue.y, 0f);
         HurtboxHitbox.Origin = gameObject;
 
