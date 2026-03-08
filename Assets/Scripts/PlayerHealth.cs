@@ -76,18 +76,24 @@ public class PlayerHealth : NetworkBehaviour
             }
             if (Hitbox.KnockbackFromCenter)
             {
+                Vector3 direction = transform.position -Hitbox.transform.position;
+                float angle = Mathf.Atan2(direction.y, direction.x);
 
-                float CosFromCenter = Mathf.Cos(Vector3.Angle(transform.position, Hitbox.TopPoint.transform.position) * Mathf.Deg2Rad);
-                float SinFromCenter = Mathf.Sin(Vector3.Angle(transform.position, Hitbox.TopPoint.transform.position) * Mathf.Deg2Rad);
-                Debug.Log(CosFromCenter);
-                Debug.Log(SinFromCenter);
+                float CosFromCenter = Mathf.Cos(angle);
+                float SinFromCenter = Mathf.Sin(angle);
+
+                Debug.Log("Origin 1: " + transform.position + " Origin 2:" + Hitbox.TopPoint.transform.position);
+                Debug.Log("Degrees: " + angle);
+                Debug.Log("Cos: " + CosFromCenter);
+                Debug.Log("Sin: " + SinFromCenter);
 
 
-                rb.linearVelocity = new Vector2(Hitbox.KnockbackValue.x * SinFromCenter, Hitbox.KnockbackValue.y * CosFromCenter);
+
+                rb.linearVelocity = new Vector2(Hitbox.KnockbackValue.x * CosFromCenter, Hitbox.KnockbackValue.y * SinFromCenter);
                 if (playerMovement != null)
                 {
                     playerMovement.MomentumTime = 0;
-                    playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum * SinFromCenter;
+                    playerMovement.ExtraVertcalMomentum = collision.GetComponent<DeleteHitbox>().AddedVerticalMomentum * CosFromCenter;
                 }
             }
             else
