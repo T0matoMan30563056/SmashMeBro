@@ -15,6 +15,8 @@ public class PlayerAttacks : NetworkBehaviour
     [SerializeField] private float ResetTime;
     private float ResetTimeRemaining;
 
+    public ProjectileBehavior ProjectilePrefab;
+    public Transform LaunchOffSet;
 
     private float HeldDirection = 1;
     public float Direction;
@@ -25,7 +27,11 @@ public class PlayerAttacks : NetworkBehaviour
 
     private float RecoveryCooldown;
 
-    private bool Recovery = false;
+
+    public bool Recovery = false;
+    public bool ShootingRecovery = false;
+
+    public float FireCooldown = 0f;
 
 
     private NetworkObject NetObj;
@@ -39,11 +45,14 @@ public class PlayerAttacks : NetworkBehaviour
     {
         NetObj = GetComponent<NetworkObject>();
         NetObjRef = NetObj;
+       
     }
 
 
 void Update()
     {
+        FireCooldown = Mathf.Max(FireCooldown - Time.deltaTime, 0f);
+
         if (!IsOwner)
         {
             return;
@@ -67,16 +76,30 @@ void Update()
             HeavyAttacks();
 
         }
+       
 
-        ResetTimeRemaining = Mathf.Max(ResetTimeRemaining - Time.deltaTime, 0);
-
-        if (ResetTimeRemaining == 0)
+        else if (Keyboard.current.vKey.wasPressedThisFrame && FireCooldown == 0f)
         {
-            AttackOrder = 0;
+            Shoot();
         }
 
 
+
+        ResetTimeRemaining = Mathf.Max(ResetTimeRemaining - Time.deltaTime, 0);
+
+if (FireCooldown <= 0)
+{
+    ShootingRecovery = false;
+}
+
+
         RecoveryCooldown = Mathf.Max(RecoveryCooldown - Time.deltaTime, 0);
+
+        if (FireCooldown == 0)
+        {
+            ShootingRecovery = false;
+        }
+
 
         if (RecoveryCooldown == 0)
         {
@@ -152,6 +175,9 @@ void Update()
             {
                 if (VerticalDirection == -1)
                 {
+                    animator.SetBool("HeavyAttack", true);
+                    animator.SetFloat("HeavyAttacks", 1);
+                    Invoke(nameof(ResetHeavyAttack), 0.2f);
                     InitAttack(new int[] { 2, 1 });
                     //StartHitbox(HeavyUniqueAttacks[1], Vector3.zero, Quaternion.identity, transform);
 
@@ -159,6 +185,7 @@ void Update()
                 else
                 {
                     InitAttack(new int[] { 2, 2 });
+                    Debug.Log("2");
                     //StartHitbox(HeavyUniqueAttacks[2], Vector3.zero, Quaternion.identity, transform);
                 }
             }
@@ -166,11 +193,17 @@ void Update()
             {
                 if (Mathf.Abs(Direction) == 1)
                 {
+                    animator.SetBool("HeavyAttack", true);
+                    animator.SetFloat("HeavyAttacks", 2);
+                    Invoke(nameof(ResetHeavyAttack), 0.2f); 
                     InitAttack(new int[] { 2, 5 });
                     //StartHitbox(HeavyUniqueAttacks[5], Vector3.zero, Quaternion.identity, transform);
                 }
                 else
                 {
+                    animator.SetBool("HeavyAttack", true);
+                    animator.SetFloat("HeavyAttacks", 0);
+                    Invoke(nameof(ResetHeavyAttack), 0.2f);
                     InitAttack(new int[] { 2, 0 });
                     //StartHitbox(HeavyUniqueAttacks[0], Vector3.zero, Quaternion.identity, transform);
                 }
@@ -181,16 +214,32 @@ void Update()
             if (VerticalDirection == -1)
             {
                 InitAttack(new int[] { 2, 4 });
+                Debug.Log("4");
                 //StartHitbox(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
                 InitAttack(new int[] { 2, 3 });
+                Debug.Log("3");
                 //StartHitbox(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
             }
         }
     }
+    private void Shoot()
+    {
+        animator.SetTrigger("Shooting");
+        LaunchOffSet.localPosition = new Vector3(Mathf.Abs(LaunchOffSet.localPosition.x) * HeldDirection, LaunchOffSet.localPosition.y, 0f);
+        ProjectileBehavior bullet = Instantiate(ProjectilePrefab, LaunchOffSet.position, Quaternion.identity);
+        bullet.SetDirection(HeldDirection);
+        
+        FireCooldown = 0.5f;
+        ShootingRecovery = true;
+    }
 
+    private void ResetHeavyAttack()
+    {
+        animator.SetBool("HeavyAttack", false);
+    }
     /*
      private void StartHitbox(GameObject Attack, Vector3 Position, Quaternion Rotation, Transform Origin)
      {

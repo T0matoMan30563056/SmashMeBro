@@ -136,9 +136,9 @@ TextureImporter:
       name: Player Punch 64x64_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 4
         y: 0
-        width: 60
+        width: 53
         height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -158,7 +158,7 @@ TextureImporter:
       name: Player Punch 64x64_1
       rect:
         serializedVersion: 2
-        x: 59
+        x: 58
         y: 0
         width: 64
         height: 64
@@ -180,7 +180,7 @@ TextureImporter:
       name: Player Punch 64x64_2
       rect:
         serializedVersion: 2
-        x: 124
+        x: 122
         y: 0
         width: 64
         height: 64
@@ -202,7 +202,7 @@ TextureImporter:
       name: Player Punch 64x64_3
       rect:
         serializedVersion: 2
-        x: 187
+        x: 186
         y: 0
         width: 64
         height: 64
@@ -224,7 +224,7 @@ TextureImporter:
       name: Player Punch 64x64_4
       rect:
         serializedVersion: 2
-        x: 271
+        x: 273
         y: 0
         width: 64
         height: 64
@@ -246,10 +246,10 @@ TextureImporter:
       name: Player Punch 64x64_5
       rect:
         serializedVersion: 2
-        x: 337
+        x: 336
         y: 0
         width: 64
-        height: 59
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -268,10 +268,10 @@ TextureImporter:
       name: Player Punch 64x64_6
       rect:
         serializedVersion: 2
-        x: 396
-        y: 4
+        x: 395
+        y: 0
         width: 64
-        height: 52
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,23 +287,23 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Punch 64x64_9
+      name: Player Punch 64x64_7
       rect:
         serializedVersion: 2
-        x: 469
-        y: 7
-        width: 34
-        height: 49
+        x: 464
+        y: 0
+        width: 44
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: af10cba5183331e40800000000000000
-      internalID: 5625896990181949946
+      spriteID: aa7b6248f91f251469bdb1dfcb502b05
+      internalID: 7137891975270234453
       vertices: []
       indices: 
       edges: []
@@ -320,19 +320,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Player Punch 64x64_0: -3265511694173517792
       Player Punch 64x64_1: -5958394551721289882
-      Player Punch 64x64_10: -3448787175358288976
-      Player Punch 64x64_11: 418967443538332138
       Player Punch 64x64_2: 4648443667726022596
       Player Punch 64x64_3: 7906255216823545266
       Player Punch 64x64_4: -5437086216529083779
       Player Punch 64x64_5: -2093828169686684309
       Player Punch 64x64_6: 2760074175503823497
       Player Punch 64x64_7: 7137891975270234453
-      Player Punch 64x64_9: 5625896990181949946
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
