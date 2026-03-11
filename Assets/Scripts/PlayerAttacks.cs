@@ -6,7 +6,7 @@ using static UnityEditor.FilePathAttribute;
 
 public class PlayerAttacks : NetworkBehaviour
 {
-    [SerializeField] private Animator animator;
+    public Animator animator;
     [SerializeField] private GameObject[] AttackSequence;
     [SerializeField] private GameObject[] LightUniqueAttacks;
     [SerializeField] private GameObject[] HeavyUniqueAttacks;
@@ -16,7 +16,6 @@ public class PlayerAttacks : NetworkBehaviour
     private float ResetTimeRemaining;
 
     public ProjectileBehavior ProjectilePrefab;
-    public Transform LaunchOffSet;
 
     private float HeldDirection = 1;
     public float Direction;
@@ -77,29 +76,7 @@ void Update()
 
         }
        
-
-        else if (Keyboard.current.vKey.wasPressedThisFrame && FireCooldown == 0f)
-        {
-            Shoot();
-        }
-
-
-
-        ResetTimeRemaining = Mathf.Max(ResetTimeRemaining - Time.deltaTime, 0);
-
-if (FireCooldown <= 0)
-{
-    ShootingRecovery = false;
-}
-
-
         RecoveryCooldown = Mathf.Max(RecoveryCooldown - Time.deltaTime, 0);
-
-        if (FireCooldown == 0)
-        {
-            ShootingRecovery = false;
-        }
-
 
         if (RecoveryCooldown == 0)
         {
@@ -214,27 +191,16 @@ if (FireCooldown <= 0)
             if (VerticalDirection == -1)
             {
                 InitAttack(new int[] { 2, 4 });
-                Debug.Log("4");
                 //StartHitbox(HeavyUniqueAttacks[4], Vector3.zero, Quaternion.identity, transform);
             }
             else
             {
                 InitAttack(new int[] { 2, 3 });
-                Debug.Log("3");
                 //StartHitbox(HeavyUniqueAttacks[3], Vector3.zero, Quaternion.identity, transform);
             }
         }
     }
-    private void Shoot()
-    {
-        animator.SetTrigger("Shooting");
-        LaunchOffSet.localPosition = new Vector3(Mathf.Abs(LaunchOffSet.localPosition.x) * HeldDirection, LaunchOffSet.localPosition.y, 0f);
-        ProjectileBehavior bullet = Instantiate(ProjectilePrefab, LaunchOffSet.position, Quaternion.identity);
-        bullet.SetDirection(HeldDirection);
-        
-        FireCooldown = 0.5f;
-        ShootingRecovery = true;
-    }
+
 
     private void ResetHeavyAttack()
     {

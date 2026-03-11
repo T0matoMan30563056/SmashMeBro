@@ -19,8 +19,12 @@ public class ProjectileBehavior : MonoBehaviour
         transform.localScale = scale;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        if (!collision.CompareTag("Player") && !collision.CompareTag("Hurtbox"))
+        {
+            Destroy(gameObject);
+        }
     }
+
 }
