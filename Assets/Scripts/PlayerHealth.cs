@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using Unity.Netcode;
@@ -56,15 +57,23 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (collision.CompareTag("Hurtbox") && !Invincibility && collision.GetComponent<DeleteHitbox>() != null)
         {
+            
             DeleteHitbox Hitbox = collision.GetComponent<DeleteHitbox>();
 
             if (Hitbox.Origin == gameObject) return;
 
-            if (Hitbox.Origin == collision.GetComponentInParent<PlayerMovement>().OwnerObject)
+            try
             {
-                DamageTaken += Mathf.Round(Hitbox.Damage);
-                StatUpdater.instance.StatHolderObj.Dmg += DamageTaken;
-                DamageTaken = 0f;
+                if (Hitbox.Origin == collision.GetComponentInParent<PlayerMovement>().OwnerObject)
+                {
+                    DamageTaken += Mathf.Round(Hitbox.Damage);
+                    StatUpdater.instance.StatHolderObj.Dmg += DamageTaken;
+                    DamageTaken = 0f;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
             }
 
 

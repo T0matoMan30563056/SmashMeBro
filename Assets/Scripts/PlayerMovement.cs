@@ -270,10 +270,7 @@ public class PlayerMovement : NetworkBehaviour
         //rb.linearVelocity = new Vector2(Speed * MoveValue.x + CurrentVerticalMomentum, rb.linearVelocity.y);
         //This is a potential fix
 
-        // testing no movement while shooting
-        //rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, Speed * MoveValue.x, LerpT(MomentumTime)), rb.linearVelocity.y);
-        float moveSpeed = playerAttacks.ShootingRecovery ? 0f : Speed * MoveValue.x;
-        rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, moveSpeed, LerpT(MomentumTime)), rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, Speed * MoveValue.x, LerpT(MomentumTime)), rb.linearVelocity.y);
 
         if (Jumped && !Strafe)
         {

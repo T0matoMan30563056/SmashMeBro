@@ -837,7 +837,7 @@ GameObject:
   - component: {fileID: 798756293}
   m_Layer: 6
   m_Name: Dummy
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -858,7 +858,7 @@ MonoBehaviour:
   MaxHitpoints: 1000
   Hitpoints: 0
   KnockbackScalar: 1
-  InvincibilityDuration: 0.3
+  InvincibilityDuration: 0.05
   Stunned: 0
 --- !u!50 &798756294
 Rigidbody2D:

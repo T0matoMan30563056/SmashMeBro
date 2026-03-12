@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 6198958251641071022}
   - component: {fileID: 8368908509596733511}
   - component: {fileID: 2973746238319937552}
+  - component: {fileID: 950349784236293096}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Hurtbox
@@ -166,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileBehavior
   BulletSpeed: 22
+  Lifetime: 3
 --- !u!70 &2973746238319937552
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -196,10 +198,47 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.04}
   m_Size: {x: 1, y: 0.3}
   m_Direction: 1
+--- !u!114 &950349784236293096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2715076049804959110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db8d0697ffb4764ab21ba570248828c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeleteHitbox
+  ShowTopMostFoldoutHeaderGroup: 1
+  Duration: 1
+  Damage: 0
+  Recovery: 0
+  KnockbackValue: {x: 0, y: 0}
+  TopPoint: {fileID: 0}
+  KnockbackFromCenter: 0
+  PositionValue: {x: 0, y: 0}
+  Origin: {fileID: 0}
+  VerticalAnimation:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  HorizontalAnimation:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Animation: 0
+  Strafe: 0
+  AddedVerticalMomentum: 0
+  LocalHitbox: 1
