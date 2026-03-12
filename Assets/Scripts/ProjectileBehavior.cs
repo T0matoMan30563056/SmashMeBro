@@ -13,7 +13,7 @@ public class ProjectileBehavior : MonoBehaviour
 
     public void SetDirection(float direction)
     {
-        GetComponent<Rigidbody2D>().linearVelocity = Vector2.right * direction * BulletSpeed;
+        GetComponent<Rigidbody2D>().linearVelocity = transform.right * direction * BulletSpeed;
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * direction;
         transform.localScale = scale;

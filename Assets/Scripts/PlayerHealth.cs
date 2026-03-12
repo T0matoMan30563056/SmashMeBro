@@ -89,13 +89,7 @@ public class PlayerHealth : NetworkBehaviour
                 float angle = Mathf.Atan2(direction.y, direction.x);
 
                 float CosFromCenter = Mathf.Cos(angle);
-                float SinFromCenter = Mathf.Sin(angle);
-
-                Debug.Log("Origin 1: " + transform.position + " Origin 2:" + Hitbox.TopPoint.transform.position);
-                Debug.Log("Degrees: " + angle);
-                Debug.Log("Cos: " + CosFromCenter);
-                Debug.Log("Sin: " + SinFromCenter);
-
+                float SinFromCenter = Mathf.Sin(angle);      
 
 
                 rb.linearVelocity = new Vector2(Hitbox.KnockbackValue.x * CosFromCenter, Hitbox.KnockbackValue.y * SinFromCenter);

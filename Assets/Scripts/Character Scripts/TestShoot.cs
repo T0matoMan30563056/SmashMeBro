@@ -9,7 +9,7 @@ public class TestShoot : MonoBehaviour
     [SerializeField] private GameObject ProjectilePrefab;
     [SerializeField] private int BulletNum;
     [SerializeField] private float BurstCooldown;
-
+    [SerializeField] private float AditionalAngle;
 
     void Start()
     {
@@ -20,10 +20,9 @@ public class TestShoot : MonoBehaviour
 
     private IEnumerator Shoot()
     {
+        animator.SetTrigger("Shooting");
         for (int i = 0; i < BulletNum; i++)
         {
-
-            animator.SetTrigger("Shooting");
             GameObject bullet = Instantiate(ProjectilePrefab, transform.position, Quaternion.identity);
             ProjectileBehavior bulletBehaviour = bullet.GetComponent<ProjectileBehavior>();
             BulletParameters(bullet.GetComponent<DeleteHitbox>());
