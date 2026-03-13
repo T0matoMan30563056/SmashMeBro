@@ -142,7 +142,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -153,7 +153,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 2
+  m_Constraints: 0
 --- !u!114 &8368908509596733511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +167,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileBehavior
   BulletSpeed: 22
-  Lifetime: 3
 --- !u!70 &2973746238319937552
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

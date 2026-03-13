@@ -10,6 +10,7 @@ public class TestShoot : MonoBehaviour
     [SerializeField] private int BulletNum;
     [SerializeField] private float BurstCooldown;
     [SerializeField] private float AditionalAngle;
+    [SerializeField] private float StartAngle;
 
     void Start()
     {
@@ -23,11 +24,13 @@ public class TestShoot : MonoBehaviour
         animator.SetTrigger("Shooting");
         for (int i = 0; i < BulletNum; i++)
         {
-            GameObject bullet = Instantiate(ProjectilePrefab, transform.position, Quaternion.identity);
+            float direction = transform.localScale.x / Mathf.Abs(transform.localScale.x);
+
+            GameObject bullet = Instantiate(ProjectilePrefab, transform.position, Quaternion.identity * Quaternion.Euler(0f, 0f, StartAngle + AditionalAngle * i * direction));
             ProjectileBehavior bulletBehaviour = bullet.GetComponent<ProjectileBehavior>();
             BulletParameters(bullet.GetComponent<DeleteHitbox>());
 
-            bulletBehaviour.SetDirection(transform.localScale.x / Mathf.Abs(transform.localScale.x));
+            bulletBehaviour.SetDirection(direction);
 
 
 

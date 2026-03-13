@@ -189,3 +189,5 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 2715076049804959110, guid: d68d701d3d783cc4ebe9e0351b8eaeff, type: 3}
   BulletNum: 10
   BurstCooldown: 0.05
+  AditionalAngle: 5
+  StartAngle: -25
