@@ -22,7 +22,9 @@ ________________________________________
 
 ________________________________________
 
-
+## Brukerflyt:
+Brukeren kan åpne spillet og lage en bruker. Når de er logget inn i brukeren så vil de ha muligheten til å kunne redigere brukeren sitt navn og profilbilde. Hvis de velger ikke å lage en bruker vil navnet dems bli vist som Guest og hvis de har bruker men ikke ett profilbilde så får de en placeholder.
+________________________________________
 
 ## Teknologivalg
 Vi bruker python, flask som beckend, sammen med C# på unity som vår frontend, databasen er på rassbarry pi og er en mariadb. Vi også bruker Github og Github Kanban og github desktop for å pushe filer.
@@ -127,5 +129,6 @@ BEGIN <br>
 END//
 
 DELIMITER ;
+
 
 
