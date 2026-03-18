@@ -17,6 +17,8 @@ ________________________________________
 4.	håndtering av Stats
 5.	funksjonærene Achivments
 6.	tilkobling fra Unity
+7.	Profilbilder
+8.	Kunne endre på brukeren fra unity
 
 ________________________________________
 
@@ -32,6 +34,7 @@ ________________________________________
 | id       | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Username | varchar(255) | NO   | UNI | NULL    |                |
 | Password | varchar(255) | NO   |     | NULL    |                |
+| pfp      | blob         | YES  |     | NULL    |                |
 
 
 ### Tabell for Stats
