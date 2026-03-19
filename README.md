@@ -2,7 +2,7 @@
 ## SmashBros
 ________________________________________
 Deltakere <br>
-Matej Mikic – Backend / PythonFlask <br>
+Matej Mikic – Backend / PythonFlask / Jobbet før, byttet prosjekt <br> 
 Eduard Mannino – Frontend / c# unity
 ________________________________________
 ## Prosjektidé og problemstilling
