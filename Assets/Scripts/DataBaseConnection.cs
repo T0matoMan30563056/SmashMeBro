@@ -9,6 +9,7 @@ public class DataBaseConnection : MonoBehaviour
 {
 
     public static DataBaseConnection instance;
+    
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -27,7 +28,6 @@ public class DataBaseConnection : MonoBehaviour
     }
 
     public PlayerData playerData;
-
 
 
     //Gjør parametrene om til en Json
@@ -121,6 +121,40 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
+            "http://10.200.14.25:5000/EditAccount",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+
+    }
+
+    public IEnumerator ProfileUpdater(string NewUsername, Texture2D PFP)
+    {
+
+        PFP = ResizeTexture(PFP, 128, 128);
+
+        byte[] pfpByteArray = PFP.EncodeToJPG();
+
+        string json = JsonUtility.ToJson(new UserData
+        {
+            newUsername = NewUsername,
+            pfp = pfpByteArray
+        });
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+        UnityWebRequest request = new UnityWebRequest(
             "http://10.200.14.25:5000/StatsUpdater",
             "POST"
         );
@@ -136,6 +170,7 @@ public class DataBaseConnection : MonoBehaviour
         else
         {
             Debug.Log("Response: " + request.downloadHandler.text);
+
         }
 
     }
@@ -177,5 +212,28 @@ public class DataBaseConnection : MonoBehaviour
         public float Dmg;
     }
 
+    [System.Serializable]
+    class UserData
+    {
+        public string newUsername;
+        public byte[] pfp;
+    }
+
+    private Texture2D ResizeTexture(Texture2D InputTexture, int Width, int Height)
+    {
+        RenderTexture rt = RenderTexture.GetTemporary(Width, Height);
+        Graphics.Blit(InputTexture, rt);
+
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = rt;
+
+        Texture2D result = new Texture2D(Width, Height);
+        result.ReadPixels(new Rect(0, 0, Width, Height), 0, 0);
+        result.Apply();
+
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(rt);
+        return result;
+    }
 
 }
