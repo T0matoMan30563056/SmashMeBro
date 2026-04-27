@@ -27,7 +27,9 @@ public class PlayerHealth : NetworkBehaviour
 
     private PlayerMovement playerMovement;
 
+    public bool HitstunCheck = false;
 
+    public float HitstunDuration = 0;
 
 
     public override void OnNetworkSpawn()
@@ -51,6 +53,12 @@ public class PlayerHealth : NetworkBehaviour
 
     void Update()
     {
+
+
+        if (HitstunCheck)
+        {
+            HitstunCountdown();
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -76,9 +84,12 @@ public class PlayerHealth : NetworkBehaviour
                 Debug.Log(e);
             }
 
-
+            HitstunCheck = Hitbox.Hitstun;
+            if (HitstunCheck)
+            {
+                HitstunDuration = Hitbox.HitstunDuration;
+            }
             Hitpoints -= Hitbox.Damage;
-
             if (Hitpoints <= 0f)
             {
                 Death();
@@ -128,6 +139,20 @@ public class PlayerHealth : NetworkBehaviour
         Invincibility = true;
         yield return new WaitForSeconds(InvincibilityDuration);
         Invincibility = false;
+    }
+
+
+    private void HitstunCountdown()
+    {
+        if (HitstunDuration <= 0)
+        {
+            HitstunCheck = false;
+        }
+        else
+        {
+            HitstunDuration -= Time.deltaTime;
+            Debug.Log("bazik");
+        }
     }
 
 }

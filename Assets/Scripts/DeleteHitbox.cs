@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.Netcode;
+using Unity.VisualScripting;
 
 
 
@@ -21,6 +22,10 @@ public class DeleteHitbox : NetworkBehaviour
     public float AddedVerticalMomentum;
 
     public bool LocalHitbox = false;
+
+    public bool Hitstun;
+    public float HitstunDuration;
+    
 
     //public bool GivesJump;
 

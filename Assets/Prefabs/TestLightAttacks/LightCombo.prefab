@@ -238,3 +238,5 @@ MonoBehaviour:
   Strafe: 0
   AddedVerticalMomentum: 1
   LocalHitbox: 0
+  Hitstun: 1
+  HitstunDuration: 1

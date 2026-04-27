@@ -51,4 +51,13 @@ public class MainMenu : MonoBehaviour
         Debug.Log(username + " " + password);
     }
 
+    public void MainMenuTransfer()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+    public void UserTransfer()
+    {
+        SceneManager.LoadSceneAsync(4);
+    }
+
 }

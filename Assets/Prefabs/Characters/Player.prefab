@@ -509,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1175095013
+  GlobalObjectIdHash: 4264252225
   InScenePlacedSourceGlobalObjectIdHash: 1175095013
   DeferredDespawnTick: 0
   Ownership: 1
@@ -612,6 +612,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   Strafe: 0
+  HitstunSlowdown: 0.1
   ExtraVertcalMomentum: 0
   MomentumTime: 1
   MomentumLerpMultiplier: 1
@@ -863,6 +864,8 @@ MonoBehaviour:
   KnockbackScalar: 1.5
   InvincibilityDuration: 0
   Stunned: 0
+  HitstunCheck: 0
+  HitstunDuration: 0
 --- !u!114 &6385226453966419485
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -70,6 +70,8 @@ public class PlayerMovement : NetworkBehaviour
     private float AnimationTime;
     private float AnimationDuration;
     public bool Strafe = false;
+    private bool Hitstunned = false;
+    [SerializeField] private float HitstunSlowdown;
 
 
     [Header("Momentum")]
@@ -85,7 +87,7 @@ public class PlayerMovement : NetworkBehaviour
 
     public GameObject OwnerObject;
 
-    
+    private bool Returned = false;
 
     //Vector2 MoveValue = moveAction.ReadValue<Vector2>();
 
@@ -144,182 +146,14 @@ public class PlayerMovement : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        Returned = false;
+        GetValues();
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
-        isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
+        VelocityAndMovement();
 
-        if (Physics2D.OverlapCircle(RightCheck.position, 0.1f, wall))
+        if (!Returned)
         {
-            isTouchingWall = 1;
-            animator.SetFloat("isTouchingWall", isTouchingWall);
-            animator.SetBool("isSliding", true);
-        }
-
-        else if (Physics2D.OverlapCircle(LeftCheck.position, 0.1f, wall))
-        {
-            isTouchingWall = -1;
-            SpriteTransform.localScale = new Vector3(Mathf.Abs(StartScale.x), StartScale.y, StartScale.z);
-            animator.SetFloat("isTouchingWall", isTouchingWall);
-            animator.SetBool("isSliding", true);
-        }
-        else
-        {
-            isTouchingWall = 0;
-            animator.SetFloat("isTouchingWall", isTouchingWall);
-            animator.SetBool("isSliding", false);
-
-        }
-
-        if (Jumped)
-        {
-            JumpHoldTester += 1;
-            if (JumpHoldTester == 2)
-            {
-                Jumped = false;
-            } 
-        }
-        else if (!Jumped)
-        {
-            JumpHoldTester = 0;
-        }
-
-        CurrentVerticalMomentum = Mathf.Lerp(ExtraVertcalMomentum, 0, LerpT(MomentumTime));
-        MomentumTime += Time.deltaTime * MomentumLerpMultiplier;
-
-
-        if (playerHealth != null)
-        {
-            isStunned = playerHealth.Stunned;
-        }
-        if (isStunned)
-        {
-            if (Mathf.Abs(isTouchingWall) == 1f && !Flip)
-            {
-                ExtraVertcalMomentum *= -1;
-                Flip = true;
-            }
-            else if(isTouchingWall == 0f)
-            {
-                Flip = false;
-            }
-        }
-        else
-        {
-            Flip = false;
-        }
-
-        if (AnimationStun)
-        {
-            AnimationTime += Time.deltaTime;
-
-            rb.gravityScale = 0f;
-            rb.linearVelocity = new Vector2(HorizontalAnimation.Evaluate(AnimationTime) * LocalDirection, VerticalAnimation.Evaluate(AnimationTime));
-            Keyframe lastframe = HorizontalAnimation[HorizontalAnimation.length - 1];
-            if (AnimationTime >= lastframe.time)
-            {
-                AnimationStun = false;
-                rb.gravityScale = OriginalGravity;
-                Strafe = false;
-            }
-
-            InputBuffer = 0f;
-
-            if (!Strafe)
-            {
-                return;
-            }
-        }
-
-        if (isDashing)
-        {
-
-            rb.gravityScale = 0f;
-
-            rb.linearVelocity = new Vector2(playerAttacks.Direction * DashPower, 0f);
-
-            InputBuffer = 0f;
-            return;
-        }
-
-        if (isGrounded && !isInside)
-        {
-            AirJump = true;
-        }
-
-
-        MoveValue.x = Mathf.Round(MoveValue.x);
-        MoveValue.y = Mathf.Round(MoveValue.y);
-
-        if (Mathf.Abs(MoveValue.x) == 1f && isTouchingWall == 0)
-        {
-            SpriteTransform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
-            PlayerAnimator.SetBool("isRunning", true);
-        }
-        else
-        {
-            PlayerAnimator.SetBool("isRunning", false);
-        }
-
-        playerAttacks.Direction = MoveValue.x;
-        playerAttacks.VerticalDirection = MoveValue.y;
-
-        playerAttacks.isGrounded = isGrounded;
-        playerAttacks.isInside = isInside;
-
-
-        //rb.linearVelocity = new Vector2(Speed * MoveValue.x + CurrentVerticalMomentum, rb.linearVelocity.y);
-        //This is a potential fix
-
-        rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, Speed * MoveValue.x, LerpT(MomentumTime)), rb.linearVelocity.y);
-
-        if (Jumped && !Strafe)
-        {
-            
-            if (!isGrounded && AirJump && isTouchingWall == 0)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
-                AirJump = false;
-            }
-            else if(!isGrounded && isTouchingWall != 0)
-            {
-                ExtraVertcalMomentum = WallVerticalVelocity * -isTouchingWall;
-                MomentumTime = 0;
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x + ExtraVertcalMomentum, Jump);
-            }
-            else
-            {
-                JumpBuffer = true;
-                InputBuffer = BufferDuration;
-            }
-            
-
-
-        }
-
-        if (DashStart && canDash && !Strafe) 
-        {
-            StartCoroutine(Dash());
-        }
-
-        if (isGrounded && !isInside && JumpBuffer && !Strafe)
-        {
-            GroundJump = true;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
-            InputBuffer = 0f;
-        }
-        else
-        {
-            GroundJump = false;
-        }
-
-
-
-        InputBuffer -= Time.deltaTime;
-        InputBuffer = Mathf.Clamp(InputBuffer, 0f, BufferDuration);
-
-        if (InputBuffer == 0)
-        {
-            JumpBuffer = false;
+            Jumping();
         }
 
     }
@@ -355,6 +189,204 @@ public class PlayerMovement : NetworkBehaviour
     float LerpT(float t)
     {
         return Mathf.Pow(t, 3);
+    }
+
+    private void GetValues()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, ground);
+        isInside = Physics2D.OverlapCircle(InsideCheck.position, 0.5f, ground);
+
+        if (Physics2D.OverlapCircle(RightCheck.position, 0.1f, wall))
+        {
+            isTouchingWall = 1;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", true);
+        }
+
+        else if (Physics2D.OverlapCircle(LeftCheck.position, 0.1f, wall))
+        {
+            isTouchingWall = -1;
+            SpriteTransform.localScale = new Vector3(Mathf.Abs(StartScale.x), StartScale.y, StartScale.z);
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", true);
+        }
+        else
+        {
+            isTouchingWall = 0;
+            animator.SetFloat("isTouchingWall", isTouchingWall);
+            animator.SetBool("isSliding", false);
+
+        }
+
+        if (Jumped)
+        {
+            JumpHoldTester += 1;
+            if (JumpHoldTester == 2)
+            {
+                Jumped = false;
+            }
+        }
+        else if (!Jumped)
+        {
+            JumpHoldTester = 0;
+        }
+
+        CurrentVerticalMomentum = Mathf.Lerp(ExtraVertcalMomentum, 0, LerpT(MomentumTime));
+        MomentumTime += Time.deltaTime * MomentumLerpMultiplier;
+
+
+        if (playerHealth != null)
+        {
+            isStunned = playerHealth.Stunned;
+        }
+        if (isStunned)
+        {
+            if (Mathf.Abs(isTouchingWall) == 1f && !Flip)
+            {
+                ExtraVertcalMomentum *= -1;
+                Flip = true;
+            }
+            else if (isTouchingWall == 0f)
+            {
+                Flip = false;
+            }
+        }
+        else
+        {
+            Flip = false;
+        }
+        Hitstunned = playerHealth.HitstunCheck;
+    }
+
+
+    private void VelocityAndMovement()
+    {
+        if (AnimationStun)
+        {
+            AnimationTime += Time.deltaTime;
+
+            rb.gravityScale = 0f;
+            rb.linearVelocity = new Vector2(HorizontalAnimation.Evaluate(AnimationTime) * LocalDirection, VerticalAnimation.Evaluate(AnimationTime));
+            Keyframe lastframe = HorizontalAnimation[HorizontalAnimation.length - 1];
+            if (AnimationTime >= lastframe.time)
+            {
+                AnimationStun = false;
+                rb.gravityScale = OriginalGravity;
+                Strafe = false;
+            }
+
+            InputBuffer = 0f;
+
+            if (!Strafe)
+            {
+                Returned = true;
+                return;
+            }
+        }
+
+        if (isDashing)
+        {
+
+            rb.gravityScale = 0f;
+
+            rb.linearVelocity = new Vector2(playerAttacks.Direction * DashPower, 0f);
+
+            InputBuffer = 0f;
+            Returned = true;
+            return;
+        }
+
+        if (isGrounded && !isInside)
+        {
+            AirJump = true;
+        }
+
+
+        MoveValue.x = Mathf.Round(MoveValue.x);
+        MoveValue.y = Mathf.Round(MoveValue.y);
+
+        if (Mathf.Abs(MoveValue.x) == 1f && isTouchingWall == 0)
+        {
+            SpriteTransform.localScale = new Vector3(StartScale.x * MoveValue.x, StartScale.y, StartScale.z);
+            PlayerAnimator.SetBool("isRunning", true);
+        }
+        else
+        {
+            PlayerAnimator.SetBool("isRunning", false);
+        }
+
+        playerAttacks.Direction = MoveValue.x;
+        playerAttacks.VerticalDirection = MoveValue.y;
+
+        playerAttacks.isGrounded = isGrounded;
+        playerAttacks.isInside = isInside;
+
+
+        //rb.linearVelocity = new Vector2(Speed * MoveValue.x + CurrentVerticalMomentum, rb.linearVelocity.y);
+        //This is a potential fix
+
+        if (Hitstunned)
+        {
+            rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum * HitstunSlowdown, Speed * MoveValue.x, LerpT(MomentumTime)) * HitstunSlowdown, rb.linearVelocity.y * HitstunSlowdown);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(Mathf.Lerp(CurrentVerticalMomentum, Speed * MoveValue.x, LerpT(MomentumTime)), rb.linearVelocity.y);
+        }
+    }
+
+
+    private void Jumping()
+    {
+        if (Jumped && !Strafe)
+        {
+
+            if (!isGrounded && AirJump && isTouchingWall == 0)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
+                AirJump = false;
+            }
+            else if (!isGrounded && isTouchingWall != 0)
+            {
+                ExtraVertcalMomentum = WallVerticalVelocity * -isTouchingWall;
+                MomentumTime = 0;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x + ExtraVertcalMomentum, Jump);
+            }
+            else
+            {
+                JumpBuffer = true;
+                InputBuffer = BufferDuration;
+            }
+
+
+
+        }
+
+        if (DashStart && canDash && !Strafe)
+        {
+            StartCoroutine(Dash());
+        }
+
+        if (isGrounded && !isInside && JumpBuffer && !Strafe)
+        {
+            GroundJump = true;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Jump);
+            InputBuffer = 0f;
+        }
+        else
+        {
+            GroundJump = false;
+        }
+
+
+
+        InputBuffer -= Time.deltaTime;
+        InputBuffer = Mathf.Clamp(InputBuffer, 0f, BufferDuration);
+
+        if (InputBuffer == 0)
+        {
+            JumpBuffer = false;
+        }
     }
 
 }

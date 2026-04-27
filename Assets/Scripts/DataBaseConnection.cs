@@ -17,6 +17,10 @@ public class DataBaseConnection : MonoBehaviour
         {
             instance = this;
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     
 
@@ -25,6 +29,7 @@ public class DataBaseConnection : MonoBehaviour
     {
         public string SessionUsername;
         public bool Success;
+        public byte[] pfp;
     }
 
     public PlayerData playerData;
@@ -46,7 +51,7 @@ public class DataBaseConnection : MonoBehaviour
 
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.25:5000/login",
+            "http://10.200.14.24:5000/login",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -84,7 +89,7 @@ public class DataBaseConnection : MonoBehaviour
 
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.25:5000/SignUp",
+            "http://10.200.14.24:5000/SignUp",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -99,6 +104,9 @@ public class DataBaseConnection : MonoBehaviour
         }
         else
         {
+            playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+            Debug.Log(playerData.SessionUsername);
+            Debug.Log(playerData.Success);
             Debug.Log("Response: " + request.downloadHandler.text);
         }
     }
@@ -121,7 +129,7 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.25:5000/EditAccount",
+            "http://10.200.14.24:5000/StatsUpdater",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -143,6 +151,8 @@ public class DataBaseConnection : MonoBehaviour
     public IEnumerator ProfileUpdater(string NewUsername, Texture2D PFP)
     {
 
+        Debug.Log("Updating profile");
+
         PFP = ResizeTexture(PFP, 128, 128);
 
         byte[] pfpByteArray = PFP.EncodeToJPG();
@@ -155,7 +165,7 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.25:5000/StatsUpdater",
+            "http://10.200.14.24:5000/EditAccount",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -170,7 +180,7 @@ public class DataBaseConnection : MonoBehaviour
         else
         {
             Debug.Log("Response: " + request.downloadHandler.text);
-
+            playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
         }
 
     }
@@ -179,7 +189,7 @@ public class DataBaseConnection : MonoBehaviour
     public IEnumerator TestRequest()
     {
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.25:5000/",
+            "http://10.200.14.24:5000/",
             "POST"
         );
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -219,6 +229,9 @@ public class DataBaseConnection : MonoBehaviour
         public byte[] pfp;
     }
 
+
+    //Resizes texture by rendering it on a low resolutionrender texture
+    //Then saving it to a new texture2D that replaces the old texture
     private Texture2D ResizeTexture(Texture2D InputTexture, int Width, int Height)
     {
         RenderTexture rt = RenderTexture.GetTemporary(Width, Height);
