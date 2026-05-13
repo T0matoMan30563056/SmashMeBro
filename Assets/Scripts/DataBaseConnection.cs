@@ -185,6 +185,35 @@ public class DataBaseConnection : MonoBehaviour
 
     }
 
+    public IEnumerator SendHelpMsg(string HelpMessage)
+    {
+
+        string json = JsonUtility.ToJson(new HelpRequest
+        {
+            question_txt = HelpMessage
+        });
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+        UnityWebRequest request = new UnityWebRequest(
+            "http://10.200.14.24:5000/HelpRequest",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+
+    }
+
     //Test funksjon for å teste tilkobling med flask
     public IEnumerator TestRequest()
     {
@@ -227,6 +256,12 @@ public class DataBaseConnection : MonoBehaviour
     {
         public string newUsername;
         public byte[] pfp;
+    }
+
+    [System.Serializable]
+    class HelpRequest
+    {
+        public string question_txt;
     }
 
 

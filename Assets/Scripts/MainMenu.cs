@@ -9,6 +9,8 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] TMP_InputField usernameField;
     [SerializeField] TMP_InputField passwordField;
+    [SerializeField] TMP_InputField QuestionField;
+
     private bool Started = false;
 
     //Laster hoved scenen
@@ -51,6 +53,14 @@ public class MainMenu : MonoBehaviour
         Debug.Log(username + " " + password);
     }
 
+    public void SendHelp()
+    {
+        string question = QuestionField.text;
+
+        StartCoroutine(DataBaseConnection.instance.SendHelpMsg(question));
+        Debug.Log(question);
+    }
+
     public void MainMenuTransfer()
     {
         SceneManager.LoadSceneAsync(0);
@@ -58,6 +68,16 @@ public class MainMenu : MonoBehaviour
     public void UserTransfer()
     {
         SceneManager.LoadSceneAsync(4);
+    }
+
+
+    public void FAQTransfer()
+    {
+        SceneManager.LoadSceneAsync(5);
+    }
+    public void HelpTransfer()
+    {
+        SceneManager.LoadSceneAsync(6);
     }
 
 }

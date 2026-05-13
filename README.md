@@ -64,7 +64,16 @@ ________________________________________
 | AcDmg1000  | tinyint(1) | YES  |     | 0       |                |
 | AcDmg5000  | tinyint(1) | YES  |     | 0       |                |
 | AcDmg10000 | tinyint(1) | YES  |     | 0       |                |
->
+
+### Tabell for Help
++------------+----------+------+-----+---------------------+----------------+
+| Field      | Type     | Null | Key | Default             | Extra          |
++------------+----------+------+-----+---------------------+----------------+
+| id         | int(11)  | NO   | PRI | NULL                | auto_increment |
+| UserId     | int(11)  | NO   | MUL | NULL                |                |
+| Question   | text     | NO   |     | NULL                |                |
+| DatePosted | datetime | YES  |     | current_timestamp() |                |
++------------+----------+------+-----+---------------------+----------------+
 
 
 Vi bruker en trigger fordi det er lettere å lage og håndtere enn en hel fuksjion innen python
