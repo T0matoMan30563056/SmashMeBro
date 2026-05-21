@@ -1937,6 +1937,7 @@ GameObject:
   - component: {fileID: 2120293966}
   - component: {fileID: 2120293970}
   - component: {fileID: 2120293969}
+  - component: {fileID: 2120293971}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2033,6 +2034,7 @@ MonoBehaviour:
   usernameField: {fileID: 0}
   passwordField: {fileID: 0}
   QuestionField: {fileID: 0}
+  HiddenContainer: {fileID: 0}
 --- !u!114 &2120293970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2077,6 +2079,20 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &2120293971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120293965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1e1847ec603c84baf5914d8253f3e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckLoginState
+  ToBeHiddenArr:
+  - {fileID: 286521875}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

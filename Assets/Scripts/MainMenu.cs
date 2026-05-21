@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] TMP_InputField usernameField;
     [SerializeField] TMP_InputField passwordField;
     [SerializeField] TMP_InputField QuestionField;
+    [SerializeField] GameObject HiddenContainer;
+
 
     private bool Started = false;
 
@@ -60,6 +62,22 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(DataBaseConnection.instance.SendHelpMsg(question));
         Debug.Log(question);
     }
+
+    public void SendDeleteRequest()
+    {    
+        string password = passwordField.text;
+
+        StartCoroutine(DataBaseConnection.instance.DeleteUser(password));
+    }
+
+    public void ShowContainer()
+    {
+        HiddenContainer.SetActive(true);
+    }
+    public void HideContainer()
+    {
+        HiddenContainer.SetActive(false);
+    } 
 
     public void MainMenuTransfer()
     {

@@ -1,7 +1,10 @@
-using UnityEngine;
-using UnityEngine.Networking;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Text;
+using UnityEngine;
+using UnityEngine.Networking;
+using Newtonsoft.Json.Linq;
+
 
 //Håndterer kommunikasjon mellom unity og flask
 //Lagrer klassene for andre skripts
@@ -66,9 +69,19 @@ public class DataBaseConnection : MonoBehaviour
         }
         else
         {
-            playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
-            Debug.Log(playerData.SessionUsername);
-            Debug.Log(playerData.Success);
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+            }
+            else
+            {
+                playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+                Debug.Log(playerData.SessionUsername);
+                Debug.Log(playerData.Success);
+            }
             Debug.Log("Response: " + request.downloadHandler.text);
         }
     }
@@ -104,7 +117,17 @@ public class DataBaseConnection : MonoBehaviour
         }
         else
         {
-            playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+            }
+            else
+            {
+                playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+            }
             Debug.Log(playerData.SessionUsername);
             Debug.Log(playerData.Success);
             Debug.Log("Response: " + request.downloadHandler.text);
@@ -144,6 +167,13 @@ public class DataBaseConnection : MonoBehaviour
         else
         {
             Debug.Log("Response: " + request.downloadHandler.text);
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+            }
         }
 
     }
@@ -180,7 +210,18 @@ public class DataBaseConnection : MonoBehaviour
         else
         {
             Debug.Log("Response: " + request.downloadHandler.text);
-            playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+            }
+            else
+            {
+                playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+            }
         }
 
     }
@@ -209,6 +250,54 @@ public class DataBaseConnection : MonoBehaviour
         }
         else
         {
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+            }
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+
+    }
+
+
+    public IEnumerator DeleteUser(string password)
+    {
+
+        string json = JsonUtility.ToJson(new DeleteRequest
+        {
+            password = password
+        });
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+        UnityWebRequest request = new UnityWebRequest(
+            "http://10.200.14.24:5000/DeleteAccount",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+            }
+            else
+            {
+                playerData = new PlayerData();
+            }
             Debug.Log("Response: " + request.downloadHandler.text);
         }
 
@@ -264,6 +353,11 @@ public class DataBaseConnection : MonoBehaviour
         public string question_txt;
     }
 
+    [System.Serializable]
+    class DeleteRequest
+    {
+        public string password;
+    }
 
     //Resizes texture by rendering it on a low resolutionrender texture
     //Then saving it to a new texture2D that replaces the old texture
