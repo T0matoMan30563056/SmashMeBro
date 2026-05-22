@@ -1,9 +1,11 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json.Linq;
 
 
 //Håndterer kommunikasjon mellom unity og flask
@@ -12,7 +14,11 @@ public class DataBaseConnection : MonoBehaviour
 {
 
     public static DataBaseConnection instance;
-    
+
+    [SerializeField] private GameObject LoadingPanel;
+
+    private GameObject LoadingPanelObj;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -24,8 +30,9 @@ public class DataBaseConnection : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
-    
+
 
     [System.Serializable]
     public class PlayerData
@@ -43,8 +50,9 @@ public class DataBaseConnection : MonoBehaviour
     //Kjører Login funksjonen i flask
     //Uploader Jsonen til flask
     //Lagrer return verdien som en Json
-    public IEnumerator Login(string username, string password)
+    public IEnumerator Login(string username, string password, TextMeshProUGUI ErrorText)
     {
+        LoadStart();
         string json = JsonUtility.ToJson(new LoginData
         {
             username = username,
@@ -75,15 +83,18 @@ public class DataBaseConnection : MonoBehaviour
             {
                 string ErrorMsg = (string)DownloadHandlerJson["error"];
                 Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
             }
             else
             {
                 playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
                 Debug.Log(playerData.SessionUsername);
                 Debug.Log(playerData.Success);
+                MainMenu.instance.MainMenuTransfer();
             }
             Debug.Log("Response: " + request.downloadHandler.text);
         }
+        LoadStop();
     }
 
     //Gjør parametrene om til en Json
@@ -91,8 +102,9 @@ public class DataBaseConnection : MonoBehaviour
     //Kjører SignUp funksjonen i flask
     //Uploader Jsonen til flask
     //Lagrer return verdien som en Json
-    public IEnumerator SignIn(string username, string password)
+    public IEnumerator SignIn(string username, string password, TextMeshProUGUI ErrorText)
     {
+        LoadStart();
         string json = JsonUtility.ToJson(new LoginData
         {
             username = username,
@@ -123,15 +135,66 @@ public class DataBaseConnection : MonoBehaviour
             {
                 string ErrorMsg = (string)DownloadHandlerJson["error"];
                 Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
             }
             else
             {
                 playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+                MainMenu.instance.MainMenuTransfer();
             }
             Debug.Log(playerData.SessionUsername);
             Debug.Log(playerData.Success);
             Debug.Log("Response: " + request.downloadHandler.text);
         }
+        LoadStop();
+    }
+
+
+    public IEnumerator SignOut(TextMeshProUGUI ErrorText, GetName getName)
+    {
+        LoadStart();
+        string json = JsonUtility.ToJson(new DeleteRequest
+        {
+            password = String.Empty
+        });
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+
+        UnityWebRequest request = new UnityWebRequest(
+            "http://10.200.14.24:5000/SignOut",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
+            }
+            else
+            {
+                playerData = new PlayerData();
+                CheckLoginState.instance.CheckEachLoginState();
+                getName.GetNameFunc();
+            }
+            Debug.Log(playerData.SessionUsername);
+            Debug.Log(playerData.Success);
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+        LoadStop();
     }
 
 
@@ -178,9 +241,9 @@ public class DataBaseConnection : MonoBehaviour
 
     }
 
-    public IEnumerator ProfileUpdater(string NewUsername, Texture2D PFP)
+    public IEnumerator ProfileUpdater(string NewUsername, Texture2D PFP, TextMeshProUGUI ErrorText)
     {
-
+        LoadStart();
         Debug.Log("Updating profile");
 
         PFP = ResizeTexture(PFP, 128, 128);
@@ -217,18 +280,20 @@ public class DataBaseConnection : MonoBehaviour
             {
                 string ErrorMsg = (string)DownloadHandlerJson["error"];
                 Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
             }
             else
             {
                 playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+                MainMenu.instance.MainMenuTransfer();
             }
         }
-
+        LoadStop();
     }
 
-    public IEnumerator SendHelpMsg(string HelpMessage)
+    public IEnumerator SendHelpMsg(string HelpMessage, TextMeshProUGUI ErrorText)
     {
-
+        LoadStart();
         string json = JsonUtility.ToJson(new HelpRequest
         {
             question_txt = HelpMessage
@@ -256,16 +321,21 @@ public class DataBaseConnection : MonoBehaviour
             {
                 string ErrorMsg = (string)DownloadHandlerJson["error"];
                 Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
+            }
+            else
+            {
+                MainMenu.instance.FAQTransfer();
             }
             Debug.Log("Response: " + request.downloadHandler.text);
         }
-
+        LoadStop();
     }
 
 
-    public IEnumerator DeleteUser(string password)
+    public IEnumerator DeleteUser(string password, TextMeshProUGUI ErrorText)
     {
-
+        LoadStart();
         string json = JsonUtility.ToJson(new DeleteRequest
         {
             password = password
@@ -293,14 +363,18 @@ public class DataBaseConnection : MonoBehaviour
             {
                 string ErrorMsg = (string)DownloadHandlerJson["error"];
                 Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
             }
             else
             {
                 playerData = new PlayerData();
+                ErrorText.text = String.Empty;
+                CheckLoginState.instance.CheckEachLoginState();
+                MainMenu.instance.HideContainer();
             }
             Debug.Log("Response: " + request.downloadHandler.text);
         }
-
+        LoadStop();
     }
 
     //Test funksjon for å teste tilkobling med flask
@@ -376,6 +450,24 @@ public class DataBaseConnection : MonoBehaviour
         RenderTexture.active = previous;
         RenderTexture.ReleaseTemporary(rt);
         return result;
+    }
+
+    private void LoadStart()
+    {
+        GameObject canvas = GameObject.Find("UI");
+
+        LoadingPanelObj = Instantiate(LoadingPanel, Vector3.zero, Quaternion.identity);
+
+        LoadingPanelObj.transform.SetParent(canvas.transform);
+
+        LoadingPanelObj.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+        LoadingPanelObj.GetComponent<RectTransform>().offsetMax = Vector2.one;
+
+    }
+
+    private void LoadStop()
+    {
+        Destroy(LoadingPanelObj);
     }
 
 }

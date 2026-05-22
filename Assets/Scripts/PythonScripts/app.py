@@ -334,6 +334,20 @@ def DeleteAccount():
         cursor.close()
         db.close()
 
+@app.route("/SignOut", methods=["POST"])
+def SignOut():
+    try:
+       session.clear()
+       return jsonify({
+           "Success": True
+       })
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Error occured": e,
+            "success": False
+        })
+
 
 
 

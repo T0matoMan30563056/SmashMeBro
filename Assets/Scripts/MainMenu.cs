@@ -11,9 +11,20 @@ public class MainMenu : MonoBehaviour
     [SerializeField] TMP_InputField passwordField;
     [SerializeField] TMP_InputField QuestionField;
     [SerializeField] GameObject HiddenContainer;
+    [SerializeField] GetName getName;
+
 
 
     private bool Started = false;
+
+    public static MainMenu instance;
+
+    private void Awake()
+    {
+
+        instance = this;
+        
+    }
 
     //Laster hoved scenen
     public void Startgame()
@@ -29,13 +40,20 @@ public class MainMenu : MonoBehaviour
 
     //Tar string variablene i input feltene
     //Sender dem til DataBaseConnection sin Login funksjon
-    public void LoggIn()
+    public void LoggIn(TextMeshProUGUI ErrorText)
     {
         string username = usernameField.text;
         string password = passwordField.text;
 
-        StartCoroutine(DataBaseConnection.instance.Login(username, password));
+        StartCoroutine(DataBaseConnection.instance.Login(username, password, ErrorText));
         Debug.Log(username + " " + password);
+        usernameField.text = string.Empty;
+        passwordField.text = string.Empty;
+    }
+
+    public void SignOut(TextMeshProUGUI ErrorText)
+    {
+        StartCoroutine(DataBaseConnection.instance.SignOut(ErrorText, getName));
     }
 
     //Laster sign up scenen
@@ -46,28 +64,35 @@ public class MainMenu : MonoBehaviour
 
     //Tar string variablene i input feltene
     //Sender dem til DataBaseConnection sin SignIn funksjon
-    public void SignUp()
+    public void SignUp(TextMeshProUGUI ErrorText)
     {
         string username = usernameField.text;
         string password = passwordField.text;
 
-        StartCoroutine(DataBaseConnection.instance.SignIn(username, password));
+        StartCoroutine(DataBaseConnection.instance.SignIn(username, password, ErrorText));
         Debug.Log(username + " " + password);
+
+        usernameField.text = string.Empty;
+        passwordField.text = string.Empty;
     }
 
-    public void SendHelp()
+    public void SendHelp(TextMeshProUGUI ErrorText)
     {
         string question = QuestionField.text;
 
-        StartCoroutine(DataBaseConnection.instance.SendHelpMsg(question));
+        StartCoroutine(DataBaseConnection.instance.SendHelpMsg(question, ErrorText));
         Debug.Log(question);
+
+        QuestionField.text = string.Empty;
     }
 
-    public void SendDeleteRequest()
+    public void SendDeleteRequest(TextMeshProUGUI ErrorText)
     {    
         string password = passwordField.text;
 
-        StartCoroutine(DataBaseConnection.instance.DeleteUser(password));
+        StartCoroutine(DataBaseConnection.instance.DeleteUser(password, ErrorText));
+        passwordField.text = string.Empty;
+
     }
 
     public void ShowContainer()

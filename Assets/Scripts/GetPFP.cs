@@ -44,7 +44,7 @@ public class GetPFP : MonoBehaviour
         }
     }
 
-    public void SendChanges()
+    public void SendChanges(TextMeshProUGUI ErrorText)
     {
         Debug.Log("Trying to send...");
         if (PFP != null)
@@ -55,11 +55,11 @@ public class GetPFP : MonoBehaviour
             
             if (NewUsername == string.Empty)
             {
-                StartCoroutine(DataBaseConnection.instance.ProfileUpdater(DataBaseConnection.instance.playerData.SessionUsername, PFP));
+                StartCoroutine(DataBaseConnection.instance.ProfileUpdater(DataBaseConnection.instance.playerData.SessionUsername, PFP, ErrorText));
             }
             else
             {
-                StartCoroutine(DataBaseConnection.instance.ProfileUpdater(NewUsername, PFP));
+                StartCoroutine(DataBaseConnection.instance.ProfileUpdater(NewUsername, PFP, ErrorText));
             }
         }
         else
