@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] TMP_InputField usernameField;
     [SerializeField] TMP_InputField passwordField;
     [SerializeField] TMP_InputField QuestionField;
+    [SerializeField] TMP_InputField FriendField;
     [SerializeField] GameObject HiddenContainer;
     [SerializeField] GetName getName;
 
@@ -84,6 +85,21 @@ public class MainMenu : MonoBehaviour
         Debug.Log(question);
 
         QuestionField.text = string.Empty;
+    }
+    public void SearchForFriend(TextMeshProUGUI ErrorText)
+    {
+        string FriendUsername = FriendField.text;
+
+        StartCoroutine(DataBaseConnection.instance.SearchFriend(FriendUsername, ErrorText, (string returnedUsername, byte[] returnedPfp) =>
+        {
+            GetComponent<GetPFP>().LoadFriendImage(returnedPfp, returnedUsername);
+            Debug.Log(returnedPfp);
+            Debug.Log(returnedUsername);
+
+        }));
+        Debug.Log(FriendUsername);
+
+        FriendField.text = string.Empty;
     }
 
     public void SendDeleteRequest(TextMeshProUGUI ErrorText)

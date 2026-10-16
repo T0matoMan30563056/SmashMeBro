@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d8d5bd78d85b314a8d9f6d92bb4c765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataBaseConnection
+  ServerIP: 127.0.0.1:5000
   LoadingPanel: {fileID: 6975592171047452775, guid: 05daef9b5542c2e49bf931de8b9cc659, type: 3}
   playerData:
     SessionUsername: 
@@ -2191,6 +2192,7 @@ MonoBehaviour:
   passwordField: {fileID: 0}
   QuestionField: {fileID: 0}
   HiddenContainer: {fileID: 0}
+  getName: {fileID: 0}
 --- !u!114 &2120293970
 MonoBehaviour:
   m_ObjectHideFlags: 0

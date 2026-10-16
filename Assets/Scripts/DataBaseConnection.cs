@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
+using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,8 @@ using UnityEngine.Networking;
 //Lagrer klassene for andre skripts
 public class DataBaseConnection : MonoBehaviour
 {
+
+    public string ServerIP;
 
     public static DataBaseConnection instance;
 
@@ -62,7 +65,7 @@ public class DataBaseConnection : MonoBehaviour
 
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/login",
+            "http://" + ServerIP + "/login",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -114,7 +117,7 @@ public class DataBaseConnection : MonoBehaviour
 
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/SignUp",
+            "http://" + ServerIP + "/SignUp",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -161,7 +164,7 @@ public class DataBaseConnection : MonoBehaviour
 
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/SignOut",
+            "http://" + ServerIP + "/SignOut",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -215,7 +218,7 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/StatsUpdater",
+            "http://" + ServerIP + "/StatsUpdater",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -258,7 +261,7 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/EditAccount",
+            "http://" + ServerIP + "/EditAccount",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -284,12 +287,61 @@ public class DataBaseConnection : MonoBehaviour
             }
             else
             {
+                string HeldUsername = playerData.SessionUsername;
                 playerData = JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+                if (playerData.SessionUsername == null || playerData.SessionUsername == string.Empty) playerData.SessionUsername = HeldUsername;
                 MainMenu.instance.MainMenuTransfer();
             }
         }
         LoadStop();
     }
+
+
+    public IEnumerator SearchFriend(string FriendUsername, TextMeshProUGUI ErrorText, Action<string, byte[]> returningData)
+    {
+        LoadStart();
+        Debug.Log("Locating friend");
+
+        string json = JsonUtility.ToJson(new FriendRequest
+        {
+            friendUsername = FriendUsername,
+        });
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+        UnityWebRequest request = new UnityWebRequest(
+            "http://" + ServerIP + "/SearchFriend",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            Debug.Log("Response: " + request.downloadHandler.text);
+
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
+            }
+            else
+            {
+                FriendData foundFriend = JsonUtility.FromJson<FriendData>(request.downloadHandler.text);
+                returningData?.Invoke(foundFriend.friendUsername, foundFriend.friendPfp);
+            }
+        }
+        LoadStop();
+    }
+
 
     public IEnumerator SendHelpMsg(string HelpMessage, TextMeshProUGUI ErrorText)
     {
@@ -301,7 +353,7 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/HelpRequest",
+            "http://" + ServerIP + "/HelpRequest",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -343,7 +395,7 @@ public class DataBaseConnection : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/DeleteAccount",
+            "http://" + ServerIP + "/DeleteAccount",
             "POST"
         );
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -381,7 +433,7 @@ public class DataBaseConnection : MonoBehaviour
     public IEnumerator TestRequest()
     {
         UnityWebRequest request = new UnityWebRequest(
-            "http://10.200.14.24:5000/",
+            "http://" + ServerIP + "/",
             "POST"
         );
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -433,6 +485,18 @@ public class DataBaseConnection : MonoBehaviour
         public string password;
     }
 
+    [System.Serializable]
+    class FriendData
+    {
+        public string friendUsername;
+        public byte[] friendPfp;
+    }
+
+    [System.Serializable]
+    class FriendRequest
+    {
+        public string friendUsername;
+    }
     //Resizes texture by rendering it on a low resolutionrender texture
     //Then saving it to a new texture2D that replaces the old texture
     private Texture2D ResizeTexture(Texture2D InputTexture, int Width, int Height)

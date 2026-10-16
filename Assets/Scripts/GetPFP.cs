@@ -8,7 +8,12 @@ public class GetPFP : MonoBehaviour
     Texture2D PFP;
 
     [SerializeField] RawImage ImageHolder;
+    [SerializeField] RawImage FriendImageHolder;
+
+    [SerializeField] TMP_Text FriendNameObj;
     [SerializeField] TMP_InputField usernameField;
+
+
     private void Start()
     {
         LoadImage();
@@ -20,6 +25,16 @@ public class GetPFP : MonoBehaviour
         PFP.LoadImage(DataBaseConnection.instance.playerData.pfp);
         print(DataBaseConnection.instance.playerData.pfp);
         ImageHolder.texture = PFP;
+    }
+
+    public void LoadFriendImage(byte[] FriendImageByteData, string FriendUsername)
+    {
+        Texture2D PFP = new Texture2D(2, 2);
+        PFP.LoadImage(FriendImageByteData);
+        print(FriendImageByteData);
+        FriendImageHolder.texture = PFP;
+        FriendNameObj.text = FriendUsername;
+
     }
 
 
@@ -67,4 +82,5 @@ public class GetPFP : MonoBehaviour
             Debug.Log("Failed to send!");
         }
     }
+
 }

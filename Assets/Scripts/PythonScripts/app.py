@@ -252,6 +252,54 @@ def EditAccount():
 
 
 
+@app.route("/SearchFriend", methods=["POST"])
+def SearchFriend():
+    data = request.get_json()
+    FriendUsername = data.get('friendUsername')
+
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT * FROM Accounts WHERE Username=%s", (FriendUsername,))
+        friendAccount = cursor.fetchone()
+        
+        if friendAccount and friendAccount["Active"]:
+            if (friendAccount['pfp'] != None):
+                byteList = list(friendAccount['pfp'])
+                print("not bytelist")
+                return jsonify({
+                    "friendUsername": FriendUsername,
+                    "success": True,
+                    "friendPfp": byteList
+                })
+            else:
+                return jsonify({
+                    "SessionUsername": FriendUsername,
+                    "success": True,
+                    "pfp": None
+                })
+        else:
+            cursor.close()
+            db.close()
+            return jsonify({
+                "success": False,
+                "error": "User not found"
+            })
+
+    except Exception as e:
+        print(e)
+
+        cursor.close()
+        db.close()
+        return jsonify({
+            "success": False,
+            "error": "Error locating user"
+        })
+
+
+
+
 @app.route("/HelpRequest", methods=["POST"])
 def HelpRequest():
     data = request.get_json()
