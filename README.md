@@ -7,16 +7,16 @@ Eduard Mannino – Frontend / c# unity
 ________________________________________
 ## Prosjektidé og problemstilling
 Beskrivelse
-Prosjektet er en blanding av vårt tidligere SmashBros prosjekt koblet sammen med nettvarks oppgaven. Det vi Ønsker å oppnå med prosjektet er å laget et funskionerene spill, med loggin, registering og håndtering av spillerens stats og achivments ved bruk av c# som frontend og mariadb og python som beckend på rassbarry pi. Målgruppen er barn/ungdommer som liker spill som brawlhalla eller smashbros.
+Prosjektet er en blanding av vårt tidligere SmashBros prosjekt koblet sammen med nettverks oppgaven. Det vi ønsker å oppnå med prosjektet er å laget et funskionerene spill, med loggin, registering og håndtering av spillerens stats og achivments ved bruk av c# som frontend og mariadb og python som beckend på raspberry pi. Målgruppen er barn/ungdommer som liker spill som brawlhalla eller smashbros.
 ________________________________________
 
-## Funskioner
+## Funksjoner
 1.	Registrering av bruker
 2.	Incryptering av passord
 3.	Innlogging med session
-4.	håndtering av Stats
-5.	funksjonærene Achivments
-6.	tilkobling fra Unity
+4.	Håndtering av Stats
+5.	Achivments
+6.	Tilkobling fra Unity
 7.	Profilbilder
 8.	Kunne endre på brukeren fra unity
 
@@ -27,7 +27,7 @@ Brukeren kan åpne spillet og lage en bruker. Når de er logget inn i brukeren s
 ________________________________________
 
 ## Teknologivalg
-Vi bruker python, flask som beckend, sammen med C# på unity som vår frontend, databasen er på rassbarry pi og er en mariadb. Vi også bruker Github og Github Kanban og github desktop for å pushe filer.
+Vi bruker python, flask som beckend, sammen med C# på unity som vår frontend, databasen er på raspberry pi og er en mariadb. Vi også bruker Github og Github Kanban og github desktop for å pushe filer.
 ________________________________________
 ## Datamodell
 ### Tabell for Accounts
@@ -66,14 +66,12 @@ ________________________________________
 | AcDmg10000 | tinyint(1) | YES  |     | 0       |                |
 
 ### Tabell for Help
-+------------+----------+------+-----+---------------------+----------------+
 | Field      | Type     | Null | Key | Default             | Extra          |
-+------------+----------+------+-----+---------------------+----------------+
+|------------|----------|------|-----|---------------------|----------------|
 | id         | int(11)  | NO   | PRI | NULL                | auto_increment |
 | UserId     | int(11)  | NO   | MUL | NULL                |                |
 | Question   | text     | NO   |     | NULL                |                |
 | DatePosted | datetime | YES  |     | current_timestamp() |                |
-+------------+----------+------+-----+---------------------+----------------+
 
 
 Vi bruker en trigger fordi det er lettere å lage og håndtere enn en hel fuksjion innen python
