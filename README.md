@@ -74,6 +74,15 @@ ________________________________________
 | DatePosted | datetime | YES  |     | current_timestamp() |                |
 
 
+### Tabell for Friends
+| Field      | Type                       | Null | Key | Default             | Extra |
+|------------|----------------------------|------|-----|---------------------|-------|
+| account_id | int(11)                    | NO   | PRI | NULL                |       |
+| friend_id  | int(11)                    | NO   | PRI | NULL                |       |
+| status     | enum('pending','accepted') | YES  |     | pending             |       |
+| created_at | timestamp                  | YES  |     | current_timestamp() |       |
+
+
 Vi bruker en trigger fordi det er lettere å lage og håndtere enn en hel fuksjion innen python
 
 DELIMITER // <br>
