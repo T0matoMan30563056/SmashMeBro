@@ -74,13 +74,28 @@ ________________________________________
 | DatePosted | datetime | YES  |     | current_timestamp() |                |
 
 
-### Tabell for Friends
+### Tabell for friendships
 | Field      | Type                       | Null | Key | Default             | Extra |
 |------------|----------------------------|------|-----|---------------------|-------|
 | account_id | int(11)                    | NO   | PRI | NULL                |       |
 | friend_id  | int(11)                    | NO   | PRI | NULL                |       |
 | status     | enum('pending','accepted') | YES  |     | pending             |       |
 | created_at | timestamp                  | YES  |     | current_timestamp() |       |
+
+
+### Tabell for Notifications
+
+| Field         | Type         | Null | Key | Default             | Extra          |
+|---------------|--------------|------|-----|---------------------|----------------|
+| id            | int(11)      | NO   | PRI | NULL                | auto_increment |
+| account_id    | int(11)      | NO   | MUL | NULL                |                |
+| Type          | varchar(100) | NO   |     | NULL                |                |
+| Message       | varchar(400) | YES  |     | NULL                |                |
+| Is_Read       | tinyint(1)   | YES  |     | 0                   |                |
+| Created_At    | timestamp    | YES  |     | current_timestamp() |                |
+| Clickable     | tinyint(1)   | YES  |     | 0                   |                |
+| ClickableJSON | longtext     | YES  |     | NULL                |                |
+
 
 
 Vi bruker en trigger fordi det er lettere å lage og håndtere enn en hel fuksjion innen python
@@ -146,5 +161,25 @@ END//
 
 DELIMITER ;
 
+CREATE TABLE Notifications (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    account_id INT NOT NULL,
+    Type VARCHAR(100) NOT NULL,
+    Message VARCHAR(400) DEFAULT NULL,
+    Is_Read TINYINT(1) DEFAULT 0,
+    Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Clickable TINYINT(1) DEFAULT 0,
+    ClickableJSON JSON DEFAULT NULL,
+    FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE
+);
 
+CREATE TABLE friendships (
+    account_id INT NOT NULL,
+    friend_id INT NOT NULL,
+    status ENUM('pending', 'accepted') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (account_id, friend_id),
+    FOREIGN KEY (account_id) REFERENCES Accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (friend_id) REFERENCES Accounts(id) ON DELETE CASCADE
+);
 
