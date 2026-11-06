@@ -47,6 +47,17 @@ public class DataBaseConnection : MonoBehaviour
 
     public PlayerData playerData;
 
+    [System.Serializable]
+    public class NotificationData
+    {
+        public string Type;
+        public string Message;
+        public bool Is_Read;
+        public DateTime Created_At;
+        public bool Clickable;
+        public string ClickableJSON;
+    }
+    public NotificationData[] notificationData;
 
     //Gjør parametrene om til en Json
     //Lager en WebRequest til flask
@@ -302,7 +313,7 @@ public class DataBaseConnection : MonoBehaviour
         LoadStart();
         Debug.Log("Locating friend");
 
-        string json = JsonUtility.ToJson(new FriendRequest
+        string json = JsonUtility.ToJson(new FriendCheck
         {
             friendUsername = FriendUsername,
         });
@@ -337,6 +348,52 @@ public class DataBaseConnection : MonoBehaviour
             {
                 FriendData foundFriend = JsonUtility.FromJson<FriendData>(request.downloadHandler.text);
                 returningData?.Invoke(foundFriend.friendUsername, foundFriend.friendPfp);
+            }
+        }
+        LoadStop();
+    }
+
+    public IEnumerator SendFriendRequest(string FriendUsername, TextMeshProUGUI ErrorText)
+    {
+        LoadStart();
+        Debug.Log("Sending request");
+
+        string json = JsonUtility.ToJson(new FriendData
+        {
+            friendUsername = FriendUsername,
+            
+        });
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+        UnityWebRequest request = new UnityWebRequest(
+            "http://" + ServerIP + "/FriendRequest",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            Debug.Log("Response: " + request.downloadHandler.text);
+
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+                ErrorText.text = ErrorMsg;
+            }
+            else
+            {
+                string foundFriend = JsonUtility.FromJson<FriendData>(request.downloadHandler.text).friendUsername;
+                Debug.Log("Sendt friend request to " + FriendUsername);
             }
         }
         LoadStop();
@@ -384,6 +441,62 @@ public class DataBaseConnection : MonoBehaviour
         LoadStop();
     }
 
+
+    public IEnumerator GetNotifications(bool MustBeRead /*, TextMeshProUGUI ErrorText*/)
+    {
+        LoadStart();
+        string json = JsonUtility.ToJson(new Notifications
+        {
+            MustBeRead = MustBeRead,
+            username = playerData.SessionUsername
+        });
+
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+
+        UnityWebRequest request = new UnityWebRequest(
+            "http://" + ServerIP + "/GetNotifications",
+            "POST"
+        );
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            var DownloadHandlerJson = JObject.Parse(request.downloadHandler.text);
+            bool SuccessState = (bool)DownloadHandlerJson["success"];
+            if (!SuccessState)
+            {
+
+                string ErrorMsg = (string)DownloadHandlerJson["error"];
+                Debug.Log(ErrorMsg);
+                //if (!MustBeRead) ErrorText.text = ErrorMsg;
+            }
+            else
+            {
+                if (MustBeRead) UnreadMessageExtraction(request.downloadHandler.text);
+                else MessageExtraction(request.downloadHandler.text);
+                //
+                // Continue Here Later!!!
+                //
+            }
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+        LoadStop();
+    }
+    private void UnreadMessageExtraction(string downloadHandlerText)
+    {
+        Debug.Log(downloadHandlerText);
+    }
+    private void MessageExtraction(string downloadHandlerText)
+    {
+        Debug.Log(downloadHandlerText);
+    }
 
     public IEnumerator DeleteUser(string password, TextMeshProUGUI ErrorText)
     {
@@ -486,6 +599,13 @@ public class DataBaseConnection : MonoBehaviour
     }
 
     [System.Serializable]
+    class Notifications
+    {
+        public bool MustBeRead;
+        public string username;
+    }
+
+    [System.Serializable]
     class FriendData
     {
         public string friendUsername;
@@ -493,10 +613,11 @@ public class DataBaseConnection : MonoBehaviour
     }
 
     [System.Serializable]
-    class FriendRequest
+    class FriendCheck
     {
         public string friendUsername;
     }
+
     //Resizes texture by rendering it on a low resolutionrender texture
     //Then saving it to a new texture2D that replaces the old texture
     private Texture2D ResizeTexture(Texture2D InputTexture, int Width, int Height)

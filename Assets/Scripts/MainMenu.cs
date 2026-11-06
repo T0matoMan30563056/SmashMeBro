@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject HiddenContainer;
     [SerializeField] GetName getName;
 
-
+    private string HeldFriendUsername;
 
     private bool Started = false;
 
@@ -93,13 +93,19 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(DataBaseConnection.instance.SearchFriend(FriendUsername, ErrorText, (string returnedUsername, byte[] returnedPfp) =>
         {
             GetComponent<GetPFP>().LoadFriendImage(returnedPfp, returnedUsername);
-            Debug.Log(returnedPfp);
-            Debug.Log(returnedUsername);
 
+            HeldFriendUsername = returnedUsername;
         }));
         Debug.Log(FriendUsername);
 
         FriendField.text = string.Empty;
+    }
+
+    public void StartFriendRequest(TextMeshProUGUI ErrorText)
+    {
+
+        StartCoroutine(DataBaseConnection.instance.SendFriendRequest(HeldFriendUsername, ErrorText));
+        GetComponent<GetPFP>().LoadFriendImage(null, "");
     }
 
     public void SendDeleteRequest(TextMeshProUGUI ErrorText)
